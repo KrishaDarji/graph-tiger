@@ -1,0 +1,9 @@
+seed: 42
+data:
+  raw_dir: data/raw
+  processed_dir: data/processed
+  min_user_interactions: 3
+  min_item_interactions: 1
+evaluation:
+  ks: [5, 10]
+
