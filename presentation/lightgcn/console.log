@@ -1,0 +1,354 @@
+2026-11-05 15:25:42,857 config {"processed_dir": "data/processed", "output_dir": "results/lightgcn", "dim": 64, "layers": 2, "lr": 0.001, "batch_size": 4096, "reg": 0.0001, "epochs": 200, "eval_every": 5, "patience": 10, "eval_chunk_size": 2048, "seed": 42, "subsample_users": 0, "device": "auto", "resume": true, "device_used": "cuda", "git": {"commit": "8786201728c5513421977a99bf637b604372bcd6", "dirty": true}, "n_users": 147241, "n_items": 163257, "n_train_edges": 490538, "item_id_sha256": "530294dbc0c0dad1b0b9c1deb573e3aa51e2877ad3378cdf79fab06972ab73a0", "selection_metric": "ndcg@10", "cold_items": {"items_total": 163257, "items_degree_0": 43349, "items_degree_1_4": 99639, "items_degree_5_plus": 20269}}
+2026-11-05 15:25:46,183 epoch 1 loss=0.66588 bpr=0.66577 time=1.9s
+2026-11-05 15:25:47,817 epoch 2 loss=0.62322 bpr=0.62310 time=1.6s
+2026-11-05 15:25:49,455 epoch 3 loss=0.54639 bpr=0.54623 time=1.6s
+2026-11-05 15:25:51,091 epoch 4 loss=0.45540 bpr=0.45518 time=1.6s
+2026-11-05 15:25:52,728 epoch 5 loss=0.36492 bpr=0.36464 time=1.6s
+2026-11-05 15:25:54,055 val epoch 5 {"recall@5": 0.01163398781589367, "ndcg@5": 0.007333842105126284, "recall@10": 0.01856140613008605, "ndcg@10": 0.009563278387463969}
+2026-11-05 15:25:56,090 epoch 6 loss=0.29043 bpr=0.29007 time=1.6s
+2026-11-05 15:25:57,717 epoch 7 loss=0.23458 bpr=0.23416 time=1.6s
+2026-11-05 15:25:59,343 epoch 8 loss=0.19267 bpr=0.19219 time=1.6s
+2026-11-05 15:26:00,968 epoch 9 loss=0.16125 bpr=0.16071 time=1.6s
+2026-11-05 15:26:02,595 epoch 10 loss=0.13634 bpr=0.13576 time=1.6s
+2026-11-05 15:26:03,836 val epoch 10 {"recall@5": 0.013304718115198892, "ndcg@5": 0.008577429346464157, "recall@10": 0.020700755903586637, "ndcg@10": 0.010956909174124818}
+2026-11-05 15:26:06,098 epoch 11 loss=0.11775 bpr=0.11712 time=1.6s
+2026-11-05 15:26:07,733 epoch 12 loss=0.10161 bpr=0.10094 time=1.6s
+2026-11-05 15:26:09,366 epoch 13 loss=0.08947 bpr=0.08876 time=1.6s
+2026-11-05 15:26:10,998 epoch 14 loss=0.07923 bpr=0.07849 time=1.6s
+2026-11-05 15:26:12,631 epoch 15 loss=0.07046 bpr=0.06968 time=1.6s
+2026-11-05 15:26:13,872 val epoch 15 {"recall@5": 0.014459287834230955, "ndcg@5": 0.009351542967761927, "recall@10": 0.022330736683396607, "ndcg@10": 0.011885601533859752}
+2026-11-05 15:26:16,209 epoch 16 loss=0.06321 bpr=0.06240 time=1.6s
+2026-11-05 15:26:17,835 epoch 17 loss=0.05711 bpr=0.05627 time=1.6s
+2026-11-05 15:26:19,460 epoch 18 loss=0.05164 bpr=0.05077 time=1.6s
+2026-11-05 15:26:21,083 epoch 19 loss=0.04731 bpr=0.04641 time=1.6s
+2026-11-05 15:26:22,708 epoch 20 loss=0.04399 bpr=0.04307 time=1.6s
+2026-11-05 15:26:23,978 val epoch 20 {"recall@5": 0.01567498183250589, "ndcg@5": 0.010243190363324446, "recall@10": 0.02413729871435266, "ndcg@10": 0.012962403949572378}
+2026-11-05 15:26:26,519 epoch 21 loss=0.03983 bpr=0.03888 time=1.6s
+2026-11-05 15:26:28,150 epoch 22 loss=0.03664 bpr=0.03567 time=1.6s
+2026-11-05 15:26:29,778 epoch 23 loss=0.03390 bpr=0.03291 time=1.6s
+2026-11-05 15:26:31,409 epoch 24 loss=0.03189 bpr=0.03087 time=1.6s
+2026-11-05 15:26:33,040 epoch 25 loss=0.02930 bpr=0.02826 time=1.6s
+2026-11-05 15:26:34,282 val epoch 25 {"recall@5": 0.016571471261401377, "ndcg@5": 0.010865087500572171, "recall@10": 0.025488824444278427, "ndcg@10": 0.013732808096169617}
+2026-11-05 15:26:36,717 epoch 26 loss=0.02711 bpr=0.02606 time=1.6s
+2026-11-05 15:26:38,338 epoch 27 loss=0.02576 bpr=0.02468 time=1.6s
+2026-11-05 15:26:39,960 epoch 28 loss=0.02387 bpr=0.02277 time=1.6s
+2026-11-05 15:26:41,581 epoch 29 loss=0.02241 bpr=0.02130 time=1.6s
+2026-11-05 15:26:43,202 epoch 30 loss=0.02123 bpr=0.02010 time=1.6s
+2026-11-05 15:26:44,444 val epoch 30 {"recall@5": 0.01742041958421907, "ndcg@5": 0.011527716611055382, "recall@10": 0.02664339416331049, "ndcg@10": 0.014487102614386299}
+2026-11-05 15:26:46,921 epoch 31 loss=0.02048 bpr=0.01933 time=1.6s
+2026-11-05 15:26:48,551 epoch 32 loss=0.01884 bpr=0.01767 time=1.6s
+2026-11-05 15:26:50,181 epoch 33 loss=0.01787 bpr=0.01668 time=1.6s
+2026-11-05 15:26:51,811 epoch 34 loss=0.01696 bpr=0.01576 time=1.6s
+2026-11-05 15:26:53,441 epoch 35 loss=0.01608 bpr=0.01486 time=1.6s
+2026-11-05 15:26:54,678 val epoch 35 {"recall@5": 0.018004496030317643, "ndcg@5": 0.011960378485641906, "recall@10": 0.027275011715486856, "ndcg@10": 0.014943117815766734}
+2026-11-05 15:26:57,108 epoch 36 loss=0.01538 bpr=0.01415 time=1.6s
+2026-11-05 15:26:58,733 epoch 37 loss=0.01464 bpr=0.01339 time=1.6s
+2026-11-05 15:27:00,359 epoch 38 loss=0.01418 bpr=0.01292 time=1.6s
+2026-11-05 15:27:01,984 epoch 39 loss=0.01344 bpr=0.01216 time=1.6s
+2026-11-05 15:27:03,609 epoch 40 loss=0.01287 bpr=0.01157 time=1.6s
+2026-11-05 15:27:04,845 val epoch 40 {"recall@5": 0.018683654688571798, "ndcg@5": 0.012386759037480129, "recall@10": 0.028286958116285545, "ndcg@10": 0.015478571589424686}
+2026-11-05 15:27:07,253 epoch 41 loss=0.01206 bpr=0.01075 time=1.6s
+2026-11-05 15:27:08,884 epoch 42 loss=0.01200 bpr=0.01068 time=1.6s
+2026-11-05 15:27:10,514 epoch 43 loss=0.01156 bpr=0.01022 time=1.6s
+2026-11-05 15:27:12,142 epoch 44 loss=0.01089 bpr=0.00954 time=1.6s
+2026-11-05 15:27:13,772 epoch 45 loss=0.01060 bpr=0.00924 time=1.6s
+2026-11-05 15:27:15,009 val epoch 45 {"recall@5": 0.019172648922514787, "ndcg@5": 0.01283610456749741, "recall@10": 0.02900686629403495, "ndcg@10": 0.016004439088492386}
+2026-11-05 15:27:17,512 epoch 46 loss=0.01028 bpr=0.00890 time=1.6s
+2026-11-05 15:27:19,135 epoch 47 loss=0.00991 bpr=0.00852 time=1.6s
+2026-11-05 15:27:20,755 epoch 48 loss=0.00922 bpr=0.00781 time=1.6s
+2026-11-05 15:27:22,376 epoch 49 loss=0.00917 bpr=0.00775 time=1.6s
+2026-11-05 15:27:23,998 epoch 50 loss=0.00885 bpr=0.00742 time=1.6s
+2026-11-05 15:27:25,232 val epoch 50 {"recall@5": 0.019946889792924524, "ndcg@5": 0.013286458600321262, "recall@10": 0.029590942740133522, "ndcg@10": 0.016400102932814638}
+2026-11-05 15:27:27,849 epoch 51 loss=0.00866 bpr=0.00722 time=1.6s
+2026-11-05 15:27:29,480 epoch 52 loss=0.00852 bpr=0.00707 time=1.6s
+2026-11-05 15:27:31,110 epoch 53 loss=0.00807 bpr=0.00661 time=1.6s
+2026-11-05 15:27:32,741 epoch 54 loss=0.00765 bpr=0.00617 time=1.6s
+2026-11-05 15:27:34,371 epoch 55 loss=0.00755 bpr=0.00606 time=1.6s
+2026-11-05 15:27:35,610 val epoch 55 {"recall@5": 0.0203679681610421, "ndcg@5": 0.013550294936056027, "recall@10": 0.03006635380091143, "ndcg@10": 0.016678840386971212}
+2026-11-05 15:27:38,174 epoch 56 loss=0.00751 bpr=0.00601 time=1.6s
+2026-11-05 15:27:39,797 epoch 57 loss=0.00721 bpr=0.00570 time=1.6s
+2026-11-05 15:27:41,420 epoch 58 loss=0.00687 bpr=0.00535 time=1.6s
+2026-11-05 15:27:43,041 epoch 59 loss=0.00677 bpr=0.00524 time=1.6s
+2026-11-05 15:27:44,664 epoch 60 loss=0.00677 bpr=0.00522 time=1.6s
+2026-11-05 15:27:45,900 val epoch 60 {"recall@5": 0.02053775782560564, "ndcg@5": 0.013711512455687528, "recall@10": 0.030643638660427464, "ndcg@10": 0.016970453754392455}
+2026-11-05 15:27:48,412 epoch 61 loss=0.00655 bpr=0.00499 time=1.6s
+2026-11-05 15:27:50,042 epoch 62 loss=0.00648 bpr=0.00492 time=1.6s
+2026-11-05 15:27:51,672 epoch 63 loss=0.00642 bpr=0.00484 time=1.6s
+2026-11-05 15:27:53,302 epoch 64 loss=0.00616 bpr=0.00457 time=1.6s
+2026-11-05 15:27:54,932 epoch 65 loss=0.00589 bpr=0.00429 time=1.6s
+2026-11-05 15:27:56,166 val epoch 65 {"recall@5": 0.02085017080840255, "ndcg@5": 0.013937753326582149, "recall@10": 0.031146216067535537, "ndcg@10": 0.01725661924840734}
+2026-11-05 15:27:58,626 epoch 66 loss=0.00585 bpr=0.00425 time=1.6s
+2026-11-05 15:28:00,251 epoch 67 loss=0.00579 bpr=0.00417 time=1.6s
+2026-11-05 15:28:01,878 epoch 68 loss=0.00564 bpr=0.00402 time=1.6s
+2026-11-05 15:28:03,506 epoch 69 loss=0.00556 bpr=0.00392 time=1.6s
+2026-11-05 15:28:05,130 epoch 70 loss=0.00553 bpr=0.00389 time=1.6s
+2026-11-05 15:28:06,368 val epoch 70 {"recall@5": 0.02119654172411217, "ndcg@5": 0.014129354727706569, "recall@10": 0.031390713184507035, "ndcg@10": 0.017422057099640283}
+2026-11-05 15:28:08,787 epoch 71 loss=0.00535 bpr=0.00370 time=1.6s
+2026-11-05 15:28:10,425 epoch 72 loss=0.00537 bpr=0.00371 time=1.6s
+2026-11-05 15:28:12,061 epoch 73 loss=0.00529 bpr=0.00362 time=1.6s
+2026-11-05 15:28:13,692 epoch 74 loss=0.00510 bpr=0.00343 time=1.6s
+2026-11-05 15:28:15,327 epoch 75 loss=0.00488 bpr=0.00320 time=1.6s
+2026-11-05 15:28:16,563 val epoch 75 {"recall@5": 0.021352748215510624, "ndcg@5": 0.014239966812958279, "recall@10": 0.031832166312372234, "ndcg@10": 0.017626201131828927}
+2026-11-05 15:28:19,039 epoch 76 loss=0.00487 bpr=0.00318 time=1.6s
+2026-11-05 15:28:20,666 epoch 77 loss=0.00499 bpr=0.00329 time=1.6s
+2026-11-05 15:28:22,293 epoch 78 loss=0.00496 bpr=0.00325 time=1.6s
+2026-11-05 15:28:23,919 epoch 79 loss=0.00483 bpr=0.00312 time=1.6s
+2026-11-05 15:28:25,546 epoch 80 loss=0.00469 bpr=0.00297 time=1.6s
+2026-11-05 15:28:26,786 val epoch 80 {"recall@5": 0.021495371533744, "ndcg@5": 0.014371222551765013, "recall@10": 0.03208345501592627, "ndcg@10": 0.01778884840172725}
+2026-11-05 15:28:29,168 epoch 81 loss=0.00456 bpr=0.00283 time=1.6s
+2026-11-05 15:28:30,801 epoch 82 loss=0.00451 bpr=0.00278 time=1.6s
+2026-11-05 15:28:32,434 epoch 83 loss=0.00455 bpr=0.00281 time=1.6s
+2026-11-05 15:28:34,069 epoch 84 loss=0.00456 bpr=0.00282 time=1.6s
+2026-11-05 15:28:35,706 epoch 85 loss=0.00432 bpr=0.00256 time=1.6s
+2026-11-05 15:28:36,945 val epoch 85 {"recall@5": 0.02171949389096787, "ndcg@5": 0.014519737007144599, "recall@10": 0.03225324468048981, "ndcg@10": 0.017923089048109426}
+2026-11-05 15:28:39,378 epoch 86 loss=0.00446 bpr=0.00270 time=1.6s
+2026-11-05 15:28:41,002 epoch 87 loss=0.00432 bpr=0.00255 time=1.6s
+2026-11-05 15:28:42,626 epoch 88 loss=0.00441 bpr=0.00264 time=1.6s
+2026-11-05 15:28:44,253 epoch 89 loss=0.00415 bpr=0.00238 time=1.6s
+2026-11-05 15:28:45,880 epoch 90 loss=0.00405 bpr=0.00227 time=1.6s
+2026-11-05 15:28:47,116 val epoch 90 {"recall@5": 0.021970782594521905, "ndcg@5": 0.014678811507783098, "recall@10": 0.03230757737315014, "ndcg@10": 0.018018674683778203}
+2026-11-05 15:28:49,614 epoch 91 loss=0.00409 bpr=0.00230 time=1.6s
+2026-11-05 15:28:51,250 epoch 92 loss=0.00409 bpr=0.00229 time=1.6s
+2026-11-05 15:28:52,885 epoch 93 loss=0.00415 bpr=0.00236 time=1.6s
+2026-11-05 15:28:54,522 epoch 94 loss=0.00408 bpr=0.00228 time=1.6s
+2026-11-05 15:28:56,157 epoch 95 loss=0.00406 bpr=0.00225 time=1.6s
+2026-11-05 15:28:57,396 val epoch 95 {"recall@5": 0.022215279711493403, "ndcg@5": 0.014775107419020947, "recall@10": 0.03266753146202484, "ndcg@10": 0.01814364043270452}
+2026-11-05 15:28:59,832 epoch 96 loss=0.00382 bpr=0.00200 time=1.6s
+2026-11-05 15:29:01,460 epoch 97 loss=0.00390 bpr=0.00208 time=1.6s
+2026-11-05 15:29:03,086 epoch 98 loss=0.00388 bpr=0.00205 time=1.6s
+2026-11-05 15:29:04,713 epoch 99 loss=0.00385 bpr=0.00203 time=1.6s
+2026-11-05 15:29:06,338 epoch 100 loss=0.00391 bpr=0.00208 time=1.6s
+2026-11-05 15:29:07,573 val epoch 100 {"recall@5": 0.02234431985656169, "ndcg@5": 0.014893997370552348, "recall@10": 0.03277619684734551, "ndcg@10": 0.018255295988926497}
+2026-11-05 15:29:09,971 epoch 101 loss=0.00368 bpr=0.00184 time=1.6s
+2026-11-05 15:29:11,601 epoch 102 loss=0.00371 bpr=0.00187 time=1.6s
+2026-11-05 15:29:13,231 epoch 103 loss=0.00371 bpr=0.00187 time=1.6s
+2026-11-05 15:29:14,865 epoch 104 loss=0.00365 bpr=0.00180 time=1.6s
+2026-11-05 15:29:16,496 epoch 105 loss=0.00376 bpr=0.00191 time=1.6s
+2026-11-05 15:29:17,731 val epoch 105 {"recall@5": 0.022378277789474398, "ndcg@5": 0.01492720505609638, "recall@10": 0.03312935934963767, "ndcg@10": 0.01839211313362271}
+2026-11-05 15:29:20,112 epoch 106 loss=0.00376 bpr=0.00190 time=1.6s
+2026-11-05 15:29:21,736 epoch 107 loss=0.00369 bpr=0.00184 time=1.6s
+2026-11-05 15:29:23,357 epoch 108 loss=0.00356 bpr=0.00170 time=1.6s
+2026-11-05 15:29:24,979 epoch 109 loss=0.00366 bpr=0.00180 time=1.6s
+2026-11-05 15:29:26,601 epoch 110 loss=0.00352 bpr=0.00165 time=1.6s
+2026-11-05 15:29:27,835 val epoch 110 {"recall@5": 0.022446193655299814, "ndcg@5": 0.014975164935383057, "recall@10": 0.03308181824355988, "ndcg@10": 0.01841595799652977}
+2026-11-05 15:29:30,254 epoch 111 loss=0.00353 bpr=0.00166 time=1.6s
+2026-11-05 15:29:31,887 epoch 112 loss=0.00356 bpr=0.00169 time=1.6s
+2026-11-05 15:29:33,520 epoch 113 loss=0.00369 bpr=0.00182 time=1.6s
+2026-11-05 15:29:35,156 epoch 114 loss=0.00355 bpr=0.00167 time=1.6s
+2026-11-05 15:29:36,790 epoch 115 loss=0.00350 bpr=0.00162 time=1.6s
+2026-11-05 15:29:38,027 val epoch 115 {"recall@5": 0.022452985241882356, "ndcg@5": 0.0149912303026579, "recall@10": 0.033122567763055125, "ndcg@10": 0.018442260151030874}
+2026-11-05 15:29:40,506 epoch 116 loss=0.00350 bpr=0.00162 time=1.6s
+2026-11-05 15:29:42,136 epoch 117 loss=0.00336 bpr=0.00148 time=1.6s
+2026-11-05 15:29:43,763 epoch 118 loss=0.00351 bpr=0.00162 time=1.6s
+2026-11-05 15:29:45,391 epoch 119 loss=0.00329 bpr=0.00140 time=1.6s
+2026-11-05 15:29:47,017 epoch 120 loss=0.00332 bpr=0.00143 time=1.6s
+2026-11-05 15:29:48,253 val epoch 120 {"recall@5": 0.02251410952112523, "ndcg@5": 0.015096402955273727, "recall@10": 0.033346690120279, "ndcg@10": 0.01860179967186}
+2026-11-05 15:29:50,664 epoch 121 loss=0.00340 bpr=0.00151 time=1.6s
+2026-11-05 15:29:52,297 epoch 122 loss=0.00344 bpr=0.00154 time=1.6s
+2026-11-05 15:29:53,931 epoch 123 loss=0.00341 bpr=0.00152 time=1.6s
+2026-11-05 15:29:55,566 epoch 124 loss=0.00343 bpr=0.00153 time=1.6s
+2026-11-05 15:29:57,200 epoch 125 loss=0.00338 bpr=0.00149 time=1.6s
+2026-11-05 15:29:58,433 val epoch 125 {"recall@5": 0.02264994125277606, "ndcg@5": 0.015132106353282021, "recall@10": 0.03306144348381225, "ndcg@10": 0.018492777857357683}
+2026-11-05 15:30:00,573 epoch 126 loss=0.00322 bpr=0.00132 time=1.6s
+2026-11-05 15:30:02,193 epoch 127 loss=0.00334 bpr=0.00144 time=1.6s
+2026-11-05 15:30:03,813 epoch 128 loss=0.00330 bpr=0.00140 time=1.6s
+2026-11-05 15:30:05,436 epoch 129 loss=0.00318 bpr=0.00127 time=1.6s
+2026-11-05 15:30:07,061 epoch 130 loss=0.00324 bpr=0.00134 time=1.6s
+2026-11-05 15:30:08,294 val epoch 130 {"recall@5": 0.022765398224679267, "ndcg@5": 0.015179587874539425, "recall@10": 0.03340102281293933, "ndcg@10": 0.018609253889040243}
+2026-11-05 15:30:10,616 epoch 131 loss=0.00325 bpr=0.00135 time=1.6s
+2026-11-05 15:30:12,250 epoch 132 loss=0.00324 bpr=0.00134 time=1.6s
+2026-11-05 15:30:13,885 epoch 133 loss=0.00325 bpr=0.00134 time=1.6s
+2026-11-05 15:30:15,516 epoch 134 loss=0.00327 bpr=0.00136 time=1.6s
+2026-11-05 15:30:17,151 epoch 135 loss=0.00318 bpr=0.00127 time=1.6s
+2026-11-05 15:30:18,385 val epoch 135 {"recall@5": 0.022785772984426893, "ndcg@5": 0.015245037117159663, "recall@10": 0.03342139757268695, "ndcg@10": 0.018672420130426345}
+2026-11-05 15:30:20,626 epoch 136 loss=0.00309 bpr=0.00118 time=1.6s
+2026-11-05 15:30:22,251 epoch 137 loss=0.00311 bpr=0.00120 time=1.6s
+2026-11-05 15:30:23,876 epoch 138 loss=0.00317 bpr=0.00126 time=1.6s
+2026-11-05 15:30:25,503 epoch 139 loss=0.00314 bpr=0.00123 time=1.6s
+2026-11-05 15:30:27,127 epoch 140 loss=0.00314 bpr=0.00122 time=1.6s
+2026-11-05 15:30:28,365 val epoch 140 {"recall@5": 0.022704273945436393, "ndcg@5": 0.015210617334693968, "recall@10": 0.033407814399521875, "ndcg@10": 0.018666810002337955}
+2026-11-05 15:30:30,486 epoch 141 loss=0.00307 bpr=0.00116 time=1.6s
+2026-11-05 15:30:32,118 epoch 142 loss=0.00309 bpr=0.00117 time=1.6s
+2026-11-05 15:30:33,749 epoch 143 loss=0.00304 bpr=0.00112 time=1.6s
+2026-11-05 15:30:35,381 epoch 144 loss=0.00308 bpr=0.00116 time=1.6s
+2026-11-05 15:30:37,013 epoch 145 loss=0.00311 bpr=0.00119 time=1.6s
+2026-11-05 15:30:38,245 val epoch 145 {"recall@5": 0.02291481312949518, "ndcg@5": 0.01537080172606438, "recall@10": 0.03315652569596784, "ndcg@10": 0.018687190909057228}
+2026-11-05 15:30:40,495 epoch 146 loss=0.00302 bpr=0.00111 time=1.6s
+2026-11-05 15:30:42,116 epoch 147 loss=0.00309 bpr=0.00117 time=1.6s
+2026-11-05 15:30:43,737 epoch 148 loss=0.00300 bpr=0.00108 time=1.6s
+2026-11-05 15:30:45,360 epoch 149 loss=0.00303 bpr=0.00111 time=1.6s
+2026-11-05 15:30:46,984 epoch 150 loss=0.00298 bpr=0.00106 time=1.6s
+2026-11-05 15:30:48,217 val epoch 150 {"recall@5": 0.02298952058190314, "ndcg@5": 0.01543897122911322, "recall@10": 0.033407814399521875, "ndcg@10": 0.018807835892975692}
+2026-11-05 15:30:50,484 epoch 151 loss=0.00302 bpr=0.00110 time=1.6s
+2026-11-05 15:30:52,116 epoch 152 loss=0.00300 bpr=0.00108 time=1.6s
+2026-11-05 15:30:53,747 epoch 153 loss=0.00299 bpr=0.00107 time=1.6s
+2026-11-05 15:30:55,379 epoch 154 loss=0.00291 bpr=0.00100 time=1.6s
+2026-11-05 15:30:57,009 epoch 155 loss=0.00295 bpr=0.00103 time=1.6s
+2026-11-05 15:30:58,240 val epoch 155 {"recall@5": 0.023166101833049218, "ndcg@5": 0.015445919490579324, "recall@10": 0.03353006295800762, "ndcg@10": 0.01879304720686205}
+2026-11-05 15:31:00,417 epoch 156 loss=0.00298 bpr=0.00107 time=1.6s
+2026-11-05 15:31:02,040 epoch 157 loss=0.00298 bpr=0.00106 time=1.6s
+2026-11-05 15:31:03,666 epoch 158 loss=0.00288 bpr=0.00096 time=1.6s
+2026-11-05 15:31:05,289 epoch 159 loss=0.00289 bpr=0.00097 time=1.6s
+2026-11-05 15:31:06,908 epoch 160 loss=0.00296 bpr=0.00104 time=1.6s
+2026-11-05 15:31:08,144 val epoch 160 {"recall@5": 0.023227226112292092, "ndcg@5": 0.015514195195535783, "recall@10": 0.03339423122635679, "ndcg@10": 0.018806557749313585}
+2026-11-05 15:31:10,265 epoch 161 loss=0.00300 bpr=0.00108 time=1.6s
+2026-11-05 15:31:11,897 epoch 162 loss=0.00292 bpr=0.00101 time=1.6s
+2026-11-05 15:31:13,526 epoch 163 loss=0.00291 bpr=0.00099 time=1.6s
+2026-11-05 15:31:15,157 epoch 164 loss=0.00283 bpr=0.00092 time=1.6s
+2026-11-05 15:31:16,787 epoch 165 loss=0.00293 bpr=0.00102 time=1.6s
+2026-11-05 15:31:18,020 val epoch 165 {"recall@5": 0.02348530640242867, "ndcg@5": 0.01560817011554562, "recall@10": 0.03356402089092033, "ndcg@10": 0.018863911264968128}
+2026-11-05 15:31:20,307 epoch 166 loss=0.00283 bpr=0.00092 time=1.6s
+2026-11-05 15:31:21,934 epoch 167 loss=0.00287 bpr=0.00096 time=1.6s
+2026-11-05 15:31:23,560 epoch 168 loss=0.00284 bpr=0.00092 time=1.6s
+2026-11-05 15:31:25,187 epoch 169 loss=0.00286 bpr=0.00095 time=1.6s
+2026-11-05 15:31:26,812 epoch 170 loss=0.00292 bpr=0.00101 time=1.6s
+2026-11-05 15:31:28,050 val epoch 170 {"recall@5": 0.02374338669256525, "ndcg@5": 0.015722532958804044, "recall@10": 0.03361835358358066, "ndcg@10": 0.018905473514566867}
+2026-11-05 15:31:30,319 epoch 171 loss=0.00284 bpr=0.00093 time=1.6s
+2026-11-05 15:31:31,955 epoch 172 loss=0.00288 bpr=0.00096 time=1.6s
+2026-11-05 15:31:33,587 epoch 173 loss=0.00282 bpr=0.00091 time=1.6s
+2026-11-05 15:31:35,219 epoch 174 loss=0.00279 bpr=0.00088 time=1.6s
+2026-11-05 15:31:36,849 epoch 175 loss=0.00279 bpr=0.00089 time=1.6s
+2026-11-05 15:31:38,082 val epoch 175 {"recall@5": 0.023729803519400166, "ndcg@5": 0.015758952781160452, "recall@10": 0.03358439565066795, "ndcg@10": 0.01893504730310604}
+2026-11-05 15:31:40,296 epoch 176 loss=0.00282 bpr=0.00091 time=1.6s
+2026-11-05 15:31:41,917 epoch 177 loss=0.00282 bpr=0.00092 time=1.6s
+2026-11-05 15:31:43,537 epoch 178 loss=0.00289 bpr=0.00098 time=1.6s
+2026-11-05 15:31:45,159 epoch 179 loss=0.00288 bpr=0.00098 time=1.6s
+2026-11-05 15:31:46,780 epoch 180 loss=0.00293 bpr=0.00102 time=1.6s
+2026-11-05 15:31:48,013 val epoch 180 {"recall@5": 0.023492097989011213, "ndcg@5": 0.015603878816103083, "recall@10": 0.033604770410415576, "ndcg@10": 0.018870780066358884}
+2026-11-05 15:31:50,193 epoch 181 loss=0.00285 bpr=0.00094 time=1.6s
+2026-11-05 15:31:51,826 epoch 182 loss=0.00281 bpr=0.00091 time=1.6s
+2026-11-05 15:31:53,456 epoch 183 loss=0.00287 bpr=0.00097 time=1.6s
+2026-11-05 15:31:55,086 epoch 184 loss=0.00278 bpr=0.00088 time=1.6s
+2026-11-05 15:31:56,717 epoch 185 loss=0.00272 bpr=0.00082 time=1.6s
+2026-11-05 15:31:57,964 val epoch 185 {"recall@5": 0.023519264335341378, "ndcg@5": 0.015616377828239266, "recall@10": 0.03389001704688232, "ndcg@10": 0.018954638848753685}
+2026-11-05 15:32:00,202 epoch 186 loss=0.00279 bpr=0.00090 time=1.6s
+2026-11-05 15:32:01,825 epoch 187 loss=0.00277 bpr=0.00087 time=1.6s
+2026-11-05 15:32:03,447 epoch 188 loss=0.00275 bpr=0.00085 time=1.6s
+2026-11-05 15:32:05,068 epoch 189 loss=0.00283 bpr=0.00093 time=1.6s
+2026-11-05 15:32:06,689 epoch 190 loss=0.00270 bpr=0.00080 time=1.6s
+2026-11-05 15:32:07,924 val epoch 190 {"recall@5": 0.02347851481584613, "ndcg@5": 0.01562721220774824, "recall@10": 0.033944349739542655, "ndcg@10": 0.018999563100817213}
+2026-11-05 15:32:10,191 epoch 191 loss=0.00269 bpr=0.00080 time=1.6s
+2026-11-05 15:32:11,825 epoch 192 loss=0.00272 bpr=0.00082 time=1.6s
+2026-11-05 15:32:13,458 epoch 193 loss=0.00272 bpr=0.00083 time=1.6s
+2026-11-05 15:32:15,097 epoch 194 loss=0.00270 bpr=0.00081 time=1.6s
+2026-11-05 15:32:16,756 epoch 195 loss=0.00271 bpr=0.00081 time=1.7s
+2026-11-05 15:32:18,008 val epoch 195 {"recall@5": 0.023410598950020713, "ndcg@5": 0.015566330491459971, "recall@10": 0.03398509925903791, "ndcg@10": 0.01896795048163313}
+2026-11-05 15:32:20,193 epoch 196 loss=0.00277 bpr=0.00088 time=1.6s
+2026-11-05 15:32:21,814 epoch 197 loss=0.00274 bpr=0.00085 time=1.6s
+2026-11-05 15:32:23,434 epoch 198 loss=0.00266 bpr=0.00077 time=1.6s
+2026-11-05 15:32:25,055 epoch 199 loss=0.00275 bpr=0.00086 time=1.6s
+2026-11-05 15:32:26,677 epoch 200 loss=0.00272 bpr=0.00083 time=1.6s
+2026-11-05 15:32:27,909 val epoch 200 {"recall@5": 0.023234017698874634, "ndcg@5": 0.015523302156301863, "recall@10": 0.033557229304337785, "ndcg@10": 0.01885454720908302}
+2026-11-05 15:32:33,889 test {"best_epoch": 190, "lightgcn": {"recall@5": 0.012564435177701862, "ndcg@5": 0.007992315548431432, "recall@10": 0.01978389171494353, "ndcg@10": 0.010324791846995338}, "lightgcn_warm_targets_only": {"recall@5": 0.015836329395651428, "ndcg@5": 0.010073587858813494, "recall@10": 0.024935798664612225, "ndcg@10": 0.013013462389517554}, "lightgcn_mask_train_only": {"recall@5": 0.012041483010846165, "ndcg@5": 0.007524127282897788, "recall@10": 0.019634476810127612, "ndcg@10": 0.00997937505822008}, "lightgcn_no_mask": {"recall@5": 0.009888550064180494, "ndcg@5": 0.005550470172281809, "recall@10": 0.018160702521716098, "ndcg@10": 0.00821186290947258}, "popularity_same_primary_mask": {"recall@5": 0.0048152348870219575, "ndcg@5": 0.002630265294464896, "recall@10": 0.008068404860059358, "ndcg@10": 0.0036708648778266953}, "n_test_users": 147241, "fraction_targets_cold": 0.2066068554274964, "fraction_targets_inside_primary_mask": 0.0021053918405878795}
+
+QUERY [259] B004OHQR1Q deg=691 Dotting 5 X 2 Way Marbleizing Dotting Pen Set for Nail Art Manicure Pedicure, 4 
+  LightGCN (items with training edges only):
+    [65] B006L1DNWY deg=396 15pcs Nail Art Painting Pen Brush
+    [93] B008U1Q4DI deg=279 SODIAL(R) 3000 Nail Art Gems Mixed Colours Shapes in Case (Size 2mm)
+    [238] B0087O4XKE deg=80 nail art powder 12color dust glitter sparkle nail tip decoration
+    [542] B007BLN17K deg=325 Nail Art Brushes- Professional Nail Art Brushes- Sable Nail Art Brush Pen, Detai
+    [70] B008SPOKIW deg=127 350buy Fashion Caviar Nails Art New 12 Colors plastic Beads Manicures or Pedicur
+  Content:
+    [158606] B00DSFZICO deg=0 Evermarket Dotting 5 X 2 Way Marbleizing Dotting Pen Set for Nail Art Manicure P
+    [70828] B00FPIUQUG deg=1 Top Plaza 5 X 2 Way Marbleizing Dotting Pen Set for Nail Art Manicure Pedicure, 
+    [45972] B00FPIUQU6 deg=0 WAWO 5 X 2 Way Marbleizing Dotting Pen Set for Nail Art Manicure Pedicure, 4 Oun
+    [108066] B007H55YQ6 deg=2 5 X 2 Way Marbleizing Dotting Pen Set for Nail Art Manicure Pedicure
+    [9426] B00631JA8S deg=53 MASH 5 X 2 Way Marbleizing Dotting Tool Pen Set for Nail Art Manicure Pedicure
+
+QUERY [642] B000ZMBSPE deg=661 Aztec Secrets: Indian Healing Bentonite Clay, 2 lbs
+  LightGCN (items with training edges only):
+    [29315] B003E1C4HO deg=3 St. Ives Elements Protective Cleanser, 4-ounce Pump Bottles (Pack of 6)
+    [91774] B000NEB92Q deg=1 Pharmax - Finest Pure Fish Oil 120 caps [Health and Beauty]
+    [93455] B00175XM48 deg=4 Hesh Neem Herbal Hair Oil 100ml - NEW!
+    [43002] B008M7N9EW deg=1 5 Inch Banana Clips for Hair 3 Packs of 6 (Total 18 Pieces)
+    [85532] B001XINFZ0 deg=1 MayaWear Bandana - &quot;Tequila Sunrise&quot; Hand Woven Headband 100% Elastic 
+  Content:
+    [19160] B003HUJOWA deg=8 Aztec Secret Indian Healing Clay 1lb
+    [115366] B0056ZSFGK deg=1 Secret Key Snail + EGF Repairing Toner
+    [1303] B0017WMOIG deg=6 VICTORIA SECRET by Victoria's Secret
+    [59972] B004UBI6O2 deg=1 Secret Glo
+    [161203] B009AODFHC deg=0 LG Su:m 37 Secret Programming Essence_80ml
+
+QUERY [277] B001MA0QY2 deg=612 HSI PROFESSIONAL 1 CERAMIC TOURMALINE IONIC FLAT IRON HAIR STRAIGHTENER FREE GLO
+  LightGCN (items with training edges only):
+    [54991] B00AN5MCTE deg=1 Bed Head Self Absorbed Shampoo 33.8 fl oz
+    [50644] B007739G94 deg=1 Bridal Wedding Veil White 1 Tier Short Shoulder Length Satin Ribbon Edge
+    [103441] B000K8GM4K deg=1 VO5 Straight Hair Straightening &amp; Smoothing Gel 4.0 Oz
+    [37876] B000C1UBWY deg=1 Lanarchiste By Caron For Men. Eau De Toilette Spray 3.4 Ounces
+    [18453] B008L2VQ7U deg=1 Garnier Fructis Style Survivor Tough It Out Glue, 6.8 oz. (Pack of 6)
+  Content:
+    [83653] B00EXPSWAI deg=0 HSI PROFESSIONAL 1 CERAMIC TOURMALINE IONIC FLAT IRON HAIR STRAIGHTENER FREE GLO
+    [1929] B00CFRBIC0 deg=39 HSI PROFESSIONAL CERAMIC TOURMALINE IONIC FLAT IRON HAIR STRAIGHTENER Free sampl
+    [138163] B00CUQIEN2 deg=1 HOT TOOLS Super Tool 2 inch Professional Curling Iron with Multi Heat Control 11
+    [31678] B00B76ALVO deg=2 HSI PROFESSIONAL CERAMIC TOURMALINE IONIC FLAT IRON HAIR STRAIGHTENER Free 5 ml 
+    [42853] B000OR9VRM deg=4 T3 Bespoke Labs 83818-SE Overnight Professional Ionic Ceramic Hair Dryer for Tra
+
+QUERY [926] B000142FVW deg=604 Opi Nail Lacquer, Not So Bora Pink, 0.5 Fluid Ounce
+  LightGCN (items with training edges only):
+    [961] B0034E12MO deg=2 OPI Nail Polish I'm Fondue Of You 0.5 oz.
+    [144443] B003ILLQX8 deg=1 OPI Nail Treatments Ridge Filler .5 fl oz (15 ml)
+    [69879] B000B43JRQ deg=1 OPI Nail Lacquer Grand Canyon Sunset L30
+    [60454] B002ED2S2O deg=4 OPI Nail Lacquer, Juice Bar Hopping, 0.5 Ounce
+    [151842] B00DTQ0OO4 deg=1 Body Care / Beauty Care Opi Dulce de Leche Nail Polish NLA15 Bodycare / BeautyCa
+  Content:
+    [48927] B003DVASXM deg=4 Opi Nail Lacquer, I Think in Pink, 0.5 Fluid Ounce
+    [37969] B005ADTOOA deg=1 Opi Nail Lacquer, In the Spot, Light Pink, 0.5 Fluid Ounce
+    [45259] B00E6D6VHI deg=0 Opi Nail Lacquer, Tiffany Case, 0.5 Fluid Ounce
+    [33461] B000NG9840 deg=1 Opi Nail Lacquer, Innie Minnie Mightie Bow, 0.5 Fluid Ounce
+    [9905] B0035Y9VOY deg=8 OPI Nail Lacquer, Panda-Monium Pink, 0.5 Ounce
+
+QUERY [776] B0043OYFKU deg=570 Olay Pro-X Advanced Cleansing System 0.68 Fl Oz, 1-Count
+  LightGCN (items with training edges only):
+    [36318] B001G7PYWA deg=4 Avalon Organics CoQ10 Repair Perfecting Facial Toner, 8 Ounce (Pack of 2)
+    [26691] B00AO4E9DG deg=17 TRESemme Keratin Smooth Keratin Infusing Heat Protection &amp; Shine Spray, 8 oz
+    [55993] B0015A8AFQ deg=1 Botanics Nourishing Night Cream
+    [90849] B001PT49SY deg=1 Under Eye Vitamin E Gel
+    [105333] B006OZEZME deg=3 REVLON Colorstay 16 Hour Eye Shadow Quad, Siren, 0.16 Ounce
+  Content:
+    [25629] B00CYA5E14 deg=7 Olay Pro-X Microdermabrasion Plus Advanced Cleansing System Refill, 1-Count, 1.7
+    [27659] B0012J30PU deg=36 Olay Regenerist Daily Thermal Mini-Peel 6.0 Fl Oz
+    [92867] B001ARQWEA deg=1 Olay Total Effects 7 in 1 Nourishing 6.5 FL OZ
+    [140043] B00GBXIJL2 deg=0 Olay Fresh Effects Va-Va-Vivid Powered Contour Cleansing System 0.1 Fl Oz
+    [18445] B001PRF2AA deg=4 Olay Original Active Hydrating 4.0 FL OZ
+
+QUERY [2234] B00150LT40 deg=525 Seche Vite Dry Fast Top Nail Coat, 0.5 Ounce
+  LightGCN (items with training edges only):
+    [5739] B002SICH1C deg=27 China Glaze Nail Polish, Snow Globe, 0.5 Fluid Ounce
+    [5978] B00I49VSNW deg=1 OPI Brazil 2014 Collection Nail Lacquer, Where Did Suzi's Man-go?
+    [28657] B0017ZDH52 deg=74 Seche Restore Nail Polish, 0.5 Fluid Ounce
+    [1525] B0001AQCII deg=37 China Glaze Nail Polish, Jetstream, 0.5 Fluid Ounce
+    [46307] B000XSBTM2 deg=14 China Glaze Nail Polish White on White 255 Nail Lacquer
+  Content:
+    [98805] B005TMY0IW deg=1 Creative Nail Air Dry, 2.3 Fluid Ounce
+    [160609] B00B1UE0JA deg=1 Londontown Kur Protective Nail Top Coat, 0.4 Ounce
+    [131237] B00I3G54EA deg=0 Orly Bonder Rubberized Nail Base Coat, .3 Ounce
+    [21734] B002SRCBP0 deg=2 Dermelect Cosmeceuticals Nail Recovery System, 2.2 Ounce
+    [52295] B001P8OOUS deg=3 Barielle Fortifying Nail Builder, 0.5 Ounce
+
+QUERY [67] B0069FDR96 deg=479 World Pride Nail Tape Stripe Decoration Sticker Hologram, Set of 10
+  LightGCN (items with training edges only):
+    [65] B006L1DNWY deg=396 15pcs Nail Art Painting Pen Brush
+    [70] B008SPOKIW deg=127 350buy Fashion Caviar Nails Art New 12 Colors plastic Beads Manicures or Pedicur
+    [82946] B00DBTX7PM deg=1 Ladies Beauty Box 60 PCS 12 Design HK Head Shaped 3d Nail Art DIY Decorations Wh
+    [17645] B00AZBTUNC deg=20 Nail Art 300 Pieces Gold &amp; Silver 3mm Round Metal Studs for Nails, Cellphone
+    [72] B0083QNBCM deg=198 15pcs Nail Art Gel Design Pen Painting Polish Brush Dotting Drawing Tool Set NEW
+  Content:
+    [15231] B00ENZ6C28 deg=1 World Pride Nail Tape Stripe Decoration Sticker Hologram, Set of 10 (12pcs)
+    [17367] B00DUW2NVE deg=0 Evermarket SET of 10 Nail Tape Stripe Decoration Sticker Hologram
+    [3925] B0089KAGNY deg=1 SET of 10 Nail Tape Stripe Decoration Sticker Hologram
+    [81087] B00BGVRX5C deg=0 WAWO SET of 10 Nail Tape Stripe Decoration Sticker Hologram
+    [56912] B0035LCSE2 deg=1 FantaSea 10 piece Nail Art Glitter Set
+
+QUERY [240] B001JKTTVQ deg=459 SHANY Professional 13-Piece Cosmetic Brush Set with Pouch, Set of 12 Brushes and
+  LightGCN (items with training edges only):
+    [77] B004BPVF7W deg=52 SHANY Cosmetics Carry All Train Case with Makeup and Reusable Aluminum Case, Cam
+    [4806] B0061JQY40 deg=37 SHANY Cosmetics NY Collection Pro Brush Kit, 13 Ounce (22 Piece Mix Natural and 
+    [10842] B003TPA9XG deg=29 SHANY Zebra Rolling Trolly Makeup Case, Light Weight, 12 Pounds
+    [12431] B005UKZAJG deg=93 SHANY 2012 Edition All In One Harmony Makeup Kit, 25 Ounce
+    [13774] B007UZO2G6 deg=17 SHANY Cosmetics All Black Light Weighted Makeup Train Case, Moonless Night
+  Content:
+    [80640] B00F2HW86U deg=2 M.a.c Cosmetics Professional Brush Set 24 Piece with Case
+    [13782] B0032DHP6O deg=34 SHANY Studio Quality Cosmetic Brush Set, 7 Piece with Bag
+    [43140] B002CL849Y deg=2 e.l.f. 5 Piece Brush Set with Bag, 6 Count
+    [117845] B00DTQVECU deg=0 MAC Cosmetics Professional Brush Set 24 Piece with Case
+    [79584] B008N1M3EO deg=0 MAC Cosmetics Professional Brush Set 24 piece with Case

@@ -77,6 +77,23 @@ mkdir -p logs
 sbatch scripts/run_tiger_small.sbatch
 ```
 
+## Train LightGCN on VCL
+
+Requires the split files and content file in `data/processed`. VCL has no job
+scheduler, so run inside `screen`. The script resumes from `results/lightgcn/last.pt`
+if a session drops. It refuses to start once `metrics_test.json` exists, so that the
+test split is only evaluated once per output directory.
+
+```bash
+screen -dmS lightgcn bash -c 'scripts/run_lightgcn.sh > results/lightgcn_console.log 2>&1'
+```
+
+Outputs go to `results/lightgcn/`. LightGCN row `i` in `item_emb.npy` is `item_idx`
+`i`, and row `i` of `item_content_semantic_ids.pkl`. The Transformer's token for the
+same item is `i + 1`. Results and fusion guidance are in
+`presentation/lightgcn/RESULTS.md`; `scripts/plot_lightgcn_curves.py` regenerates the
+presentation files.
+
 ## Setup
 
 ```bash
