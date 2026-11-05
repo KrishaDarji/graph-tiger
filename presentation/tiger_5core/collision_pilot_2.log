@@ -1,0 +1,46 @@
+16:52:13 start proj (20 epochs)
+INFO:root:epoch 19 evaluating [time: 2.15s, collision_rate: 0.134052]
+16:53:29 generate proj
+Max number of conflicts:  49
+Collision Rate 0.03101857807015932
+There are no duplicates in the codes after resolution.
+17:09:49 analyze proj
+{
+  "items": 163257,
+  "unique_full_ids": 163257,
+  "unique_prefixes": 158193,
+  "prefix_collision_rate": 0.031018578070159286,
+  "largest_prefix_group": 49,
+  "items_in_shared_prefixes": 8004,
+  "prefix_groups_over_codebook": 0,
+  "items_over_codebook": 0,
+  "max_last_code": 48,
+  "codes_used_per_level": [
+    137,
+    256,
+    256
+  ]
+}
+17:09:50 start content225 (225 epochs)
+INFO:root:epoch 224 evaluating [time: 2.36s, collision_rate: 0.097619]
+17:23:24 generate content225
+Max number of conflicts:  11
+Collision Rate 0.01045590694426579
+There are no duplicates in the codes after resolution.
+17:31:39 analyze content225
+{
+  "items": 163257,
+  "unique_full_ids": 163257,
+  "unique_prefixes": 161550,
+  "prefix_collision_rate": 0.010455906944265791,
+  "largest_prefix_group": 11,
+  "items_in_shared_prefixes": 3013,
+  "prefix_groups_over_codebook": 0,
+  "items_over_codebook": 0,
+  "max_last_code": 10,
+  "codes_used_per_level": [
+    254,
+    256,
+    256
+  ]
+}
