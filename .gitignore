@@ -4,6 +4,7 @@ __pycache__/
 .DS_Store
 data/raw/
 data/processed/
+data/tiger_5core/
 results/
 checkpoints/
 *.ipynb_checkpoints

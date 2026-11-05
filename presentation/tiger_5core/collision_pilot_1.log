@@ -1,0 +1,40 @@
+16:16:09 start content
+INFO:root:epoch 19 evaluating [time: 2.67s, collision_rate: 0.631477]
+Best Collision Rate 0.6314767513797265
+16:17:25 generate content
+Terminated
+16:47:25 analyze content
+Traceback (most recent call last):
+  File "/home/vvanera/graph-tiger/scripts/analyze_semantic_ids.py", line 33, in <module>
+    main()
+  File "/home/vvanera/graph-tiger/scripts/analyze_semantic_ids.py", line 14, in main
+    codes = np.load(args.codes)
+            ^^^^^^^^^^^^^^^^^^^
+  File "/home/vvanera/graph-tiger/.venv/lib/python3.12/site-packages/numpy/lib/_npyio_impl.py", line 454, in load
+    fid = stack.enter_context(open(os.fspath(file), "rb"))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/vvanera/graph-tiger/results/tiger_full_pilot/codes_content.npy'
+16:47:25 start fused
+INFO:root:epoch 19 evaluating [time: 2.25s, collision_rate: 0.033652]
+Best Collision Rate 0.03365246206900776
+16:48:42 generate fused
+Max number of conflicts:  19
+Collision Rate 0.004165211905155675
+There are no duplicates in the codes after resolution.
+16:51:54 analyze fused
+{
+  "items": 163257,
+  "unique_full_ids": 163257,
+  "unique_prefixes": 162577,
+  "prefix_collision_rate": 0.00416521190515573,
+  "largest_prefix_group": 19,
+  "items_in_shared_prefixes": 1123,
+  "prefix_groups_over_codebook": 0,
+  "items_over_codebook": 0,
+  "max_last_code": 18,
+  "codes_used_per_level": [
+    214,
+    256,
+    256
+  ]
+}
