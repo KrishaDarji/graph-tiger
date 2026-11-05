@@ -1,0 +1,33 @@
+{
+  "processed_dir": "data/processed",
+  "output_dir": "results/lightgcn",
+  "dim": 64,
+  "layers": 2,
+  "lr": 0.001,
+  "batch_size": 4096,
+  "reg": 0.0001,
+  "epochs": 200,
+  "eval_every": 5,
+  "patience": 10,
+  "eval_chunk_size": 2048,
+  "seed": 42,
+  "subsample_users": 0,
+  "device": "auto",
+  "resume": true,
+  "device_used": "cuda",
+  "git": {
+    "commit": "8786201728c5513421977a99bf637b604372bcd6",
+    "dirty": true
+  },
+  "n_users": 147241,
+  "n_items": 163257,
+  "n_train_edges": 490538,
+  "item_id_sha256": "530294dbc0c0dad1b0b9c1deb573e3aa51e2877ad3378cdf79fab06972ab73a0",
+  "selection_metric": "ndcg@10",
+  "cold_items": {
+    "items_total": 163257,
+    "items_degree_0": 43349,
+    "items_degree_1_4": 99639,
+    "items_degree_5_plus": 20269
+  }
+}

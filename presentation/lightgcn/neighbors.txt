@@ -1,0 +1,112 @@
+
+QUERY [259] B004OHQR1Q deg=691 Dotting 5 X 2 Way Marbleizing Dotting Pen Set for Nail Art Manicure Pedicure, 4 
+  LightGCN (items with training edges only):
+    [65] B006L1DNWY deg=396 15pcs Nail Art Painting Pen Brush
+    [93] B008U1Q4DI deg=279 SODIAL(R) 3000 Nail Art Gems Mixed Colours Shapes in Case (Size 2mm)
+    [238] B0087O4XKE deg=80 nail art powder 12color dust glitter sparkle nail tip decoration
+    [542] B007BLN17K deg=325 Nail Art Brushes- Professional Nail Art Brushes- Sable Nail Art Brush Pen, Detai
+    [70] B008SPOKIW deg=127 350buy Fashion Caviar Nails Art New 12 Colors plastic Beads Manicures or Pedicur
+  Content:
+    [158606] B00DSFZICO deg=0 Evermarket Dotting 5 X 2 Way Marbleizing Dotting Pen Set for Nail Art Manicure P
+    [70828] B00FPIUQUG deg=1 Top Plaza 5 X 2 Way Marbleizing Dotting Pen Set for Nail Art Manicure Pedicure, 
+    [45972] B00FPIUQU6 deg=0 WAWO 5 X 2 Way Marbleizing Dotting Pen Set for Nail Art Manicure Pedicure, 4 Oun
+    [108066] B007H55YQ6 deg=2 5 X 2 Way Marbleizing Dotting Pen Set for Nail Art Manicure Pedicure
+    [9426] B00631JA8S deg=53 MASH 5 X 2 Way Marbleizing Dotting Tool Pen Set for Nail Art Manicure Pedicure
+
+QUERY [642] B000ZMBSPE deg=661 Aztec Secrets: Indian Healing Bentonite Clay, 2 lbs
+  LightGCN (items with training edges only):
+    [29315] B003E1C4HO deg=3 St. Ives Elements Protective Cleanser, 4-ounce Pump Bottles (Pack of 6)
+    [91774] B000NEB92Q deg=1 Pharmax - Finest Pure Fish Oil 120 caps [Health and Beauty]
+    [93455] B00175XM48 deg=4 Hesh Neem Herbal Hair Oil 100ml - NEW!
+    [43002] B008M7N9EW deg=1 5 Inch Banana Clips for Hair 3 Packs of 6 (Total 18 Pieces)
+    [85532] B001XINFZ0 deg=1 MayaWear Bandana - &quot;Tequila Sunrise&quot; Hand Woven Headband 100% Elastic 
+  Content:
+    [19160] B003HUJOWA deg=8 Aztec Secret Indian Healing Clay 1lb
+    [115366] B0056ZSFGK deg=1 Secret Key Snail + EGF Repairing Toner
+    [1303] B0017WMOIG deg=6 VICTORIA SECRET by Victoria's Secret
+    [59972] B004UBI6O2 deg=1 Secret Glo
+    [161203] B009AODFHC deg=0 LG Su:m 37 Secret Programming Essence_80ml
+
+QUERY [277] B001MA0QY2 deg=612 HSI PROFESSIONAL 1 CERAMIC TOURMALINE IONIC FLAT IRON HAIR STRAIGHTENER FREE GLO
+  LightGCN (items with training edges only):
+    [54991] B00AN5MCTE deg=1 Bed Head Self Absorbed Shampoo 33.8 fl oz
+    [50644] B007739G94 deg=1 Bridal Wedding Veil White 1 Tier Short Shoulder Length Satin Ribbon Edge
+    [103441] B000K8GM4K deg=1 VO5 Straight Hair Straightening &amp; Smoothing Gel 4.0 Oz
+    [37876] B000C1UBWY deg=1 Lanarchiste By Caron For Men. Eau De Toilette Spray 3.4 Ounces
+    [18453] B008L2VQ7U deg=1 Garnier Fructis Style Survivor Tough It Out Glue, 6.8 oz. (Pack of 6)
+  Content:
+    [83653] B00EXPSWAI deg=0 HSI PROFESSIONAL 1 CERAMIC TOURMALINE IONIC FLAT IRON HAIR STRAIGHTENER FREE GLO
+    [1929] B00CFRBIC0 deg=39 HSI PROFESSIONAL CERAMIC TOURMALINE IONIC FLAT IRON HAIR STRAIGHTENER Free sampl
+    [138163] B00CUQIEN2 deg=1 HOT TOOLS Super Tool 2 inch Professional Curling Iron with Multi Heat Control 11
+    [31678] B00B76ALVO deg=2 HSI PROFESSIONAL CERAMIC TOURMALINE IONIC FLAT IRON HAIR STRAIGHTENER Free 5 ml 
+    [42853] B000OR9VRM deg=4 T3 Bespoke Labs 83818-SE Overnight Professional Ionic Ceramic Hair Dryer for Tra
+
+QUERY [926] B000142FVW deg=604 Opi Nail Lacquer, Not So Bora Pink, 0.5 Fluid Ounce
+  LightGCN (items with training edges only):
+    [961] B0034E12MO deg=2 OPI Nail Polish I'm Fondue Of You 0.5 oz.
+    [144443] B003ILLQX8 deg=1 OPI Nail Treatments Ridge Filler .5 fl oz (15 ml)
+    [69879] B000B43JRQ deg=1 OPI Nail Lacquer Grand Canyon Sunset L30
+    [60454] B002ED2S2O deg=4 OPI Nail Lacquer, Juice Bar Hopping, 0.5 Ounce
+    [151842] B00DTQ0OO4 deg=1 Body Care / Beauty Care Opi Dulce de Leche Nail Polish NLA15 Bodycare / BeautyCa
+  Content:
+    [48927] B003DVASXM deg=4 Opi Nail Lacquer, I Think in Pink, 0.5 Fluid Ounce
+    [37969] B005ADTOOA deg=1 Opi Nail Lacquer, In the Spot, Light Pink, 0.5 Fluid Ounce
+    [45259] B00E6D6VHI deg=0 Opi Nail Lacquer, Tiffany Case, 0.5 Fluid Ounce
+    [33461] B000NG9840 deg=1 Opi Nail Lacquer, Innie Minnie Mightie Bow, 0.5 Fluid Ounce
+    [9905] B0035Y9VOY deg=8 OPI Nail Lacquer, Panda-Monium Pink, 0.5 Ounce
+
+QUERY [776] B0043OYFKU deg=570 Olay Pro-X Advanced Cleansing System 0.68 Fl Oz, 1-Count
+  LightGCN (items with training edges only):
+    [36318] B001G7PYWA deg=4 Avalon Organics CoQ10 Repair Perfecting Facial Toner, 8 Ounce (Pack of 2)
+    [26691] B00AO4E9DG deg=17 TRESemme Keratin Smooth Keratin Infusing Heat Protection &amp; Shine Spray, 8 oz
+    [55993] B0015A8AFQ deg=1 Botanics Nourishing Night Cream
+    [90849] B001PT49SY deg=1 Under Eye Vitamin E Gel
+    [105333] B006OZEZME deg=3 REVLON Colorstay 16 Hour Eye Shadow Quad, Siren, 0.16 Ounce
+  Content:
+    [25629] B00CYA5E14 deg=7 Olay Pro-X Microdermabrasion Plus Advanced Cleansing System Refill, 1-Count, 1.7
+    [27659] B0012J30PU deg=36 Olay Regenerist Daily Thermal Mini-Peel 6.0 Fl Oz
+    [92867] B001ARQWEA deg=1 Olay Total Effects 7 in 1 Nourishing 6.5 FL OZ
+    [140043] B00GBXIJL2 deg=0 Olay Fresh Effects Va-Va-Vivid Powered Contour Cleansing System 0.1 Fl Oz
+    [18445] B001PRF2AA deg=4 Olay Original Active Hydrating 4.0 FL OZ
+
+QUERY [2234] B00150LT40 deg=525 Seche Vite Dry Fast Top Nail Coat, 0.5 Ounce
+  LightGCN (items with training edges only):
+    [5739] B002SICH1C deg=27 China Glaze Nail Polish, Snow Globe, 0.5 Fluid Ounce
+    [5978] B00I49VSNW deg=1 OPI Brazil 2014 Collection Nail Lacquer, Where Did Suzi's Man-go?
+    [28657] B0017ZDH52 deg=74 Seche Restore Nail Polish, 0.5 Fluid Ounce
+    [1525] B0001AQCII deg=37 China Glaze Nail Polish, Jetstream, 0.5 Fluid Ounce
+    [46307] B000XSBTM2 deg=14 China Glaze Nail Polish White on White 255 Nail Lacquer
+  Content:
+    [98805] B005TMY0IW deg=1 Creative Nail Air Dry, 2.3 Fluid Ounce
+    [160609] B00B1UE0JA deg=1 Londontown Kur Protective Nail Top Coat, 0.4 Ounce
+    [131237] B00I3G54EA deg=0 Orly Bonder Rubberized Nail Base Coat, .3 Ounce
+    [21734] B002SRCBP0 deg=2 Dermelect Cosmeceuticals Nail Recovery System, 2.2 Ounce
+    [52295] B001P8OOUS deg=3 Barielle Fortifying Nail Builder, 0.5 Ounce
+
+QUERY [67] B0069FDR96 deg=479 World Pride Nail Tape Stripe Decoration Sticker Hologram, Set of 10
+  LightGCN (items with training edges only):
+    [65] B006L1DNWY deg=396 15pcs Nail Art Painting Pen Brush
+    [70] B008SPOKIW deg=127 350buy Fashion Caviar Nails Art New 12 Colors plastic Beads Manicures or Pedicur
+    [82946] B00DBTX7PM deg=1 Ladies Beauty Box 60 PCS 12 Design HK Head Shaped 3d Nail Art DIY Decorations Wh
+    [17645] B00AZBTUNC deg=20 Nail Art 300 Pieces Gold &amp; Silver 3mm Round Metal Studs for Nails, Cellphone
+    [72] B0083QNBCM deg=198 15pcs Nail Art Gel Design Pen Painting Polish Brush Dotting Drawing Tool Set NEW
+  Content:
+    [15231] B00ENZ6C28 deg=1 World Pride Nail Tape Stripe Decoration Sticker Hologram, Set of 10 (12pcs)
+    [17367] B00DUW2NVE deg=0 Evermarket SET of 10 Nail Tape Stripe Decoration Sticker Hologram
+    [3925] B0089KAGNY deg=1 SET of 10 Nail Tape Stripe Decoration Sticker Hologram
+    [81087] B00BGVRX5C deg=0 WAWO SET of 10 Nail Tape Stripe Decoration Sticker Hologram
+    [56912] B0035LCSE2 deg=1 FantaSea 10 piece Nail Art Glitter Set
+
+QUERY [240] B001JKTTVQ deg=459 SHANY Professional 13-Piece Cosmetic Brush Set with Pouch, Set of 12 Brushes and
+  LightGCN (items with training edges only):
+    [77] B004BPVF7W deg=52 SHANY Cosmetics Carry All Train Case with Makeup and Reusable Aluminum Case, Cam
+    [4806] B0061JQY40 deg=37 SHANY Cosmetics NY Collection Pro Brush Kit, 13 Ounce (22 Piece Mix Natural and 
+    [10842] B003TPA9XG deg=29 SHANY Zebra Rolling Trolly Makeup Case, Light Weight, 12 Pounds
+    [12431] B005UKZAJG deg=93 SHANY 2012 Edition All In One Harmony Makeup Kit, 25 Ounce
+    [13774] B007UZO2G6 deg=17 SHANY Cosmetics All Black Light Weighted Makeup Train Case, Moonless Night
+  Content:
+    [80640] B00F2HW86U deg=2 M.a.c Cosmetics Professional Brush Set 24 Piece with Case
+    [13782] B0032DHP6O deg=34 SHANY Studio Quality Cosmetic Brush Set, 7 Piece with Bag
+    [43140] B002CL849Y deg=2 e.l.f. 5 Piece Brush Set with Bag, 6 Count
+    [117845] B00DTQVECU deg=0 MAC Cosmetics Professional Brush Set 24 Piece with Case
+    [79584] B008N1M3EO deg=0 MAC Cosmetics Professional Brush Set 24 piece with Case
