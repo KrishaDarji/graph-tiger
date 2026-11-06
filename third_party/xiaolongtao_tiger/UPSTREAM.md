@@ -18,3 +18,6 @@ Copied: Python source only. Compiled files, checkpoints and the data folder were
 ## Not copied
 `data/process.ipynb`. Its embeddings are saved in metadata-file order while `model/dataset.py`
 treats row i as item i + 1. `scripts/prepare_tiger_5core.py` replaces it and sorts by item.
+
+## Used alongside this code
+`scripts/run_tiger_t5.py` imports the model and data classes from `model/`. It selects on validation NDCG@10, uses constrained beam search, and scores with the project's `evaluate_rankings`. Its evaluation replaces the upstream `evaluate()` for the project's own split. `model/main.py` is still what ran the 5-core check.

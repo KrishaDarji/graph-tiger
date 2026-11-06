@@ -4,15 +4,15 @@ This project reproduces a lightweight TIGER-style generative recommender on the 
 
 ## Current scope
 
-The main research model is TIGER. The graph model is an extension, not a replacement. The project is organized as:
+The main research model is TIGER, and the graph model is an extension. Current status and results are in `results/PROJECT_STATUS_AND_ARCHITECTURE.md`, and settings are in `results/configuration_and_deviations.md`.
 
-1. Reproduce the data and chronological evaluation protocol.
-2. Generate item representations and semantic IDs.
-3. Train a lightweight TIGER-style next-item generator.
-4. Add LightGCN information to item representations.
-5. Compare baseline TIGER against graph-enhanced TIGER.
+| Experiment | RQ-VAE input | Purpose |
+|---|---|---|
+| Run 1: simple TIGER | 768-D Sentence-T5 content | Baseline |
+| Run 2: graph-enhanced TIGER | 768-D content + alpha x 768-D LightGCN | Graph effect on semantic IDs |
+| Design A: re-ranking | None: frozen Run 1 re-scored with 64-D LightGCN | Graph effect with TIGER fixed |
 
-The popularity baseline and LightGCN code are supporting baselines. The primary comparison will be content-only TIGER versus graph-enhanced TIGER.
+The popularity baseline, the earlier Transformer and standalone LightGCN are supporting baselines.
 
 ## Implementation files
 
@@ -21,9 +21,24 @@ The popularity baseline and LightGCN code are supporting baselines. The primary 
 - `scripts/prepare_data.py` — downloads and preprocesses Amazon Beauty interactions.
 - `scripts/create_split.py` — creates the chronological train/validation/test split.
 - `src/data.py` — data loading, ID encoding, and chronological splitting utilities.
-- `scripts/prepare_metadata.py` — builds product-content embeddings and lightweight semantic-ID-like codes.
+- `scripts/prepare_metadata.py` — builds the older TF-IDF embeddings and codes used by the earlier prototype.
+- `scripts/embed_items_st5.py` and `src/item_text.py` — encode item text with Sentence-T5.
+- `scripts/prepare_tiger_full.py` — writes the existing split in the T5 input format.
+- `scripts/build_fused_768.py` — builds the 768-D content + graph embeddings for Run 2.
+- `scripts/build_fused_embeddings.py` — builds the 64-D projected files, which the current plan does not use.
 
-### TIGER-style model
+### TIGER with semantic IDs
+
+- `third_party/xiaolongtao_tiger/` — upstream RQ-VAE and T5 code, with changes listed in `UPSTREAM.md`.
+- `scripts/run_tiger_model.sh` — trains one model: RQ-VAE, semantic IDs, T5, backup.
+- `scripts/run_tiger_queue.sh` and `scripts/run_tiger_graph768.sh` — run the queued experiments.
+- `scripts/run_tiger_t5.py` and `src/tiger_eval.py` — T5 training, lookup table, constrained beam search and scoring.
+- `scripts/rerank_tiger_lightgcn.py` — Design A re-ranking.
+- `scripts/analyze_semantic_ids.py` — reports collisions and codebook use.
+- `scripts/prepare_tiger_5core.py` and `scripts/run_tiger_5core.sh` — the 5-core code check.
+- `scripts/draw_architecture.py` — draws the architecture figure.
+
+### Earlier raw-ID prototype
 
 - `src/tiger_small.py` — defines the lightweight Transformer architecture.
 - `scripts/run_tiger_small.py` — trains the content-aware next-item model.
@@ -37,9 +52,22 @@ The popularity baseline and LightGCN code are supporting baselines. The primary 
 - `scripts/run_lightgcn.py` — trains the planned graph-based extension.
 - `scripts/run_popularity_baseline.py` — popularity reference baseline.
 
-The model currently trained on Hazel is the content-aware raw-ID Transformer. The full semantic-ID TIGER model and graph-enhanced TIGER are planned extensions.
 
-## Build content representations and semantic IDs
+## Run the current experiments on VCL
+
+Prepare the inputs, then start the queue in `screen`. It doesn't need an open session, and it resumes if re-run. The graph model starts after Run 1 and 768-D LightGCN finish.
+
+```bash
+python scripts/embed_items_st5.py --dataset full
+python scripts/prepare_tiger_full.py
+python scripts/run_lightgcn.py --dim 768 --output-dir results/lightgcn_768
+screen -dmS tiger_queue bash -c 'scripts/run_tiger_queue.sh'
+screen -dmS tiger_graph768 bash -c 'scripts/run_tiger_graph768.sh'
+```
+
+Progress is in `results/tiger_full/queue.log`. Run 1 re-ranking needs `results/lightgcn` from the 64-D LightGCN run. A file `results/tiger_full/SKIP_<name>` drops a model from the queue, and `queue.log` still shows it as done.
+
+## Build the earlier TF-IDF representations and codes
 
 After the interaction data has been prepared:
 
@@ -52,7 +80,7 @@ lightweight, reproducible approximation of TIGER's semantic-ID stage using
 TF-IDF, SVD, and residual quantization. The later experiment will use these
 representations in the content-only and graph-enhanced models.
 
-## Run the lightweight TIGER prototype
+## Run the earlier raw-ID prototype
 
 On the MacBook:
 
@@ -120,6 +148,5 @@ The scripts use `data/raw`, `data/processed`, and `results` inside this project.
 
 ## Project proposal
 
-The proposal is outside this folder at:
-`/Users/RadhaKrishna/Desktop/ML with Graphs/Project_proposal.pdf`
+The proposal is kept outside version control, in the `MLG/` context folder.
 

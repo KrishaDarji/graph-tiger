@@ -20,15 +20,16 @@ the GPU with the collision pilot for part of the run.
 Scored with the upstream metric code, which averages per batch. Semantic IDs: 0.49% prefix
 collisions, largest group 3, 49 of 256 first-level codes used.
 
-## Collision pilot on the project's 163,257 items
+## Semantic IDs on the project's 163,257 items
 
-These runs train only a short RQ-VAE, not T5, so they give no recommendation results.
+These runs give no recommendation results. Run 1 is the model in use. The others come from pilots or the dropped 64-D plan.
 
-| Embeddings | RQ-VAE epochs | Collisions after RQ-VAE | After retry step | Largest prefix group | First-level codes used |
-|---|---:|---:|---:|---:|---:|
-| Content (768-D) | 225 | 9.8% | 1.05% | 11 | 254 |
-| Projected content (64-D) | 20 | 13.4% | 3.10% | 49 | 137 |
-| Fused, alpha = 1 (64-D) | 20 | 3.4% | 0.42% | 19 | 214 |
+| Embeddings | Use | RQ-VAE epochs | Collisions after RQ-VAE | After retry step | Largest prefix group | First-level codes used |
+|---|---|---:|---:|---:|---:|---:|
+| Content (768-D) | **Run 1** | 225 | 9.6% | 0.97% | 14 | 247 |
+| Content (768-D) | Pilot | 225 | 9.8% | 1.05% | 11 | 254 |
+| Projected content (64-D) | Dropped plan | 225 | 11.0% | 1.48% | 66 | 256 |
+| Projected content (64-D) | Pilot | 20 | 13.4% | 3.10% | 49 | 137 |
+| Fused, alpha = 1 (64-D) | Pilot | 20 | 3.4% | 0.42% | 19 | 214 |
 
-All items received unique IDs. The content row had about 11x more training than the others,
-so it is not directly comparable to them.
+All items received unique IDs. Rows with different epoch counts are not directly comparable. Run 2's semantic IDs are pending.
