@@ -1,245 +1,134 @@
-# Graph-TIGER Project Status and Architecture Plan
+# Graph-TIGER Project Status and Architecture
+
+Last updated: 2026-11-06. All planned runs are finished.
 
 ## 1. Project goal
 
-This project studies whether collaborative user–item graph information can improve a TIGER-style generative recommender on the Amazon Beauty dataset.
+This project studies whether collaborative user–item graph information improves a TIGER-style generative recommender on Amazon Beauty.
 
-The central research question is:
+> Does adding graph-derived collaborative information improve next-item recommendation compared with content-only TIGER?
 
-> Does adding graph-derived collaborative information improve next-item recommendation compared with content-only or raw-ID sequential recommendation?
+TIGER treats recommendation as generative retrieval: a Transformer predicts an item's semantic ID, a short tuple of discrete codes derived from item content, from a user's history.
 
-The project is based on the TIGER idea of treating recommendation as generative retrieval: a Transformer predicts an item's identifier from a user's interaction history. TIGER's intended identifier is a semantic ID made from discrete codewords derived from item content.
+## 2. Dataset and evaluation
 
-## 2. Dataset and evaluation setup
-
-Source: Amazon Beauty reviews and product metadata.
-
-Prepared interaction data:
+Source: Amazon Beauty 2014 reviews and metadata, not 5-core filtered.
 
 - Interactions: 786,049
 - Users: 147,241
 - Items: 163,257
+- Training: 491,567 interactions; validation: 147,241; test: 147,241
 
-Chronological split:
+For each user, the second-to-last item is validation and the last is test. The split is per user, not by a global date, so training can include interactions later than another user's test item.
 
-- Training: 491,567 interactions
-- Validation: 147,241 interactions
-- Test: 147,241 interactions
+Metrics are Recall@5/10 and NDCG@5/10, from `src/evaluation.py`. Models are selected on validation NDCG@10, and each model's test split is evaluated once.
 
-For each user, interactions are ordered by timestamp. Earlier interactions are used for training, the next interaction is used for validation, and the final interaction is used for testing. This avoids using future behavior when training the recommender.
+## 3. Architecture
 
-Metrics:
+See `presentation/architecture/graph_tiger_architecture.png`.
 
-- Recall@5
-- Recall@10
-- NDCG@5
-- NDCG@10
+```text
+Product text -> Sentence-T5 (768-D) ---------------+-> RQ-VAE -> semantic IDs + lookup table
+                                                   |
+User-item graph -> LightGCN (768-D), Run 2 only ---+
 
-## 3. Results completed so far
+User history as semantic IDs -> T5 -> constrained beam search -> lookup table -> top 10
+```
 
-### Popularity baseline
+| Component | Role | Training |
+|---|---|---|
+| Sentence-T5 (`sentence-t5-base`) | Encodes title, brand, categories and description | Pretrained, not trained |
+| LightGCN | Collaborative user and item vectors, from training interactions only | Trained once per dimension |
+| RQ-VAE | Compresses each item vector into 3 codes, plus a 4th code that separates remaining collisions | One per run, 225 epochs |
+| T5 encoder-decoder | Predicts the next item's semantic ID | One per run, same settings |
+| Lookup table | Translates between items and codes, and limits beam search to real items | Not trained |
 
-| Model | Recall@5 | Recall@10 | NDCG@5 | NDCG@10 |
+## 4. Experiments
+
+| Experiment | RQ-VAE input | Status |
+|---|---|---|
+| Run 1: simple TIGER | 768-D content | Done |
+| Design A: re-ranking | None: frozen Run 1, with LightGCN re-scoring its top 30 candidates | Done, 768-D model selected on validation |
+| Run 2: graph-enhanced TIGER | 768-D content + α × 768-D LightGCN, normalized, α = 1 | Done |
+
+- **Design B compares Run 2 with Run 1.** The RQ-VAE input size and T5 settings match, so the graph is the main difference.
+- **Design A compares re-ranked Run 1 with Run 1.** α is chosen on validation.
+- Items with no training interactions get a graph term of 0 in Run 2.
+
+## 5. Results so far
+
+### LightGCN (64-D) test metrics, under matching masks
+
+| Masking on test | Model | R@5 | R@10 | N@5 | N@10 |
+|---|---|---:|---:|---:|---:|
+| Train + validation | LightGCN | 0.01256 | 0.01978 | 0.00799 | 0.01032 |
+| Train + validation | Popularity | 0.00482 | 0.00807 | 0.00263 | 0.00367 |
+| None | LightGCN | 0.00989 | 0.01816 | 0.00555 | 0.00821 |
+| None | Content-aware raw-ID Transformer, epoch 63 (Hazel run) | 0.00833 | 0.01304 | 0.00547 | 0.00699 |
+
+The data was rebuilt on VCL with the repo's scripts, and the counts and popularity baseline match. The Transformer was not re-evaluated on VCL. It used the older TF-IDF embeddings.
+
+### LightGCN (768-D) test metrics
+
+Selected on validation NDCG@10 at epoch 195 of 200, with the same settings as the 64-D model apart from size. It beats the 64-D model on validation as well as on test. Epoch 195 is close to the limit, so it may not have fully converged.
+
+| Masking on test | Model | R@5 | R@10 | N@5 | N@10 |
+|---|---|---:|---:|---:|---:|
+| Train + validation | LightGCN 768-D | 0.01925 | 0.02881 | 0.01290 | 0.01597 |
+| Train only | LightGCN 768-D | 0.01863 | 0.02860 | 0.01206 | 0.01527 |
+| None | LightGCN 768-D | 0.01385 | 0.02496 | 0.00734 | 0.01091 |
+
+### TIGER code check on 5-core Beauty
+
+This uses a different, smaller dataset and no graph. Test Recall@10 was 0.0580 and NDCG@10 was 0.0301, against 0.0594 and 0.0321 reported by the upstream repo and 0.0648 and 0.0384 in the paper. Details are in `presentation/tiger_5core/RESULTS.md`.
+
+### Run 1 and Design A test metrics
+
+Train + validation mask. Run 2 is added below.
+
+| Model | R@5 | R@10 | N@5 | N@10 |
 |---|---:|---:|---:|---:|
-| Popularity | 0.0048 | 0.0080 | 0.0026 | 0.0036 |
+| Run 1: simple TIGER, epoch 89 | 0.02245 | 0.03338 | 0.01519 | 0.01870 |
+| Design A: 768-D LightGCN, α = 1 (selected) | 0.02292 | 0.03399 | 0.01556 | 0.01911 |
+| Design A: 64-D LightGCN, α = 0.5 (not selected) | 0.02244 | 0.03354 | 0.01532 | 0.01888 |
+| Run 2: graph-enhanced TIGER, epoch 113 | 0.02323 | 0.03363 | 0.01596 | 0.01932 |
 
-### Content-aware raw-ID Transformer
+Validation chose the 768-D model, with NDCG@10 of 0.02692 against 0.02504 for 64-D and 0.02381 with no re-ranking. Both versions were evaluated on test, and the choice between them was made on validation alone. The test gain (2.2% on NDCG@10) is much smaller than the validation gain (13%).
 
-The current content-aware prototype uses a small Transformer. Each history item is represented by a learned item-token embedding plus a 64-dimensional product-content embedding. The model predicts the next raw item ID from a 163,257-class output layer.
+Run 1 Recall@10 by the target item's training interactions: 0 interactions (20.7% of targets) 0.00003, 1-4 (25.2%) 0.00030, 5 or more (54.1%) 0.06156.
 
-Full-test result at checkpoint epoch 63, batch 148:
+### Answer to the research question
 
-| Model | Recall@5 | Recall@10 | NDCG@5 | NDCG@10 |
-|---|---:|---:|---:|---:|
-| Content-aware raw-ID Transformer | 0.00833 | 0.01304 | 0.00547 | 0.00699 |
+On test, the graph gives TIGER a small gain on the ranking metrics, from one training seed per model. Paired bootstrap, compared with Run 1:
 
-The model improves over popularity on all reported metrics. The recorded epoch-31 result was also positive:
+- **Run 2:** N@10 +3.3% (95% interval +0.00010 to +0.00110) and N@5 +5.1%. R@10 is unchanged (+0.8%, interval includes 0). Its gain within Run 1's 99-epoch budget is not distinguishable from 0.
+- **Design A:** N@10 +2.2% (interval +0.00013 to +0.00070) and R@10 +1.8%.
+- **Run 2 vs Design A:** no measurable difference.
+- **Rare items:** Run 2 raises Recall@10 from 0.00030 to 0.00156 for targets with 1-4 training interactions. Neither method helps cold items.
 
-- Recall@5: 0.00850
-- Recall@10: 0.01282
-- NDCG@5: 0.00554
-- NDCG@10: 0.00693
+Full tables and limits are in `presentation/tiger_full/RESULTS.md`.
 
-The epoch-63 result is the current full-test result to report. It is important to describe this as a content-aware TIGER-style prototype, not yet as a complete semantic-ID TIGER reproduction.
+## 6. Changes from the proposal
 
-## 4. Current architecture
+| Proposal | Current plan | Why |
+|---|---|---|
+| Project content and graph to a shared lower dimension | 768-D LightGCN, no projection | Keeps the RQ-VAE input the same as plain TIGER |
+| Projected-content control | Not run | No projection is involved. Its 64-D files and semantic IDs are kept |
+| Graph affects semantic IDs only | Design A re-ranking added | Follows advice to keep the TIGER block fixed |
+| Hazel | VCL (NVIDIA L40S) | Current compute |
 
-```text
-User interaction history
-          |
-          v
-Raw item-ID tokens
-          |
-          +-----------------------------+
-          |                             |
-          v                             v
-Learned item embedding        64-D product-content embedding
-          |                             |
-          +-------------+---------------+
-                        v
-              Small Transformer encoder
-                        |
-                        v
-             163,257-way raw item classifier
-                        |
-                        v
-                 Next-item prediction
-```
+Slide 5 of the update deck shows LightGCN entering the Transformer. That design is not being run.
 
-### What the current model demonstrates
+## 7. Known limitations
 
-The current model demonstrates that learned sequential modeling plus product content can outperform a popularity-only strategy on this dataset.
+- 20.7% of test targets have no training interactions, and 61% of items have 1–4.
+- Validation scores run well above test scores for both LightGCN and the 5-core TIGER check.
+- Results come from one seed each.
+- Reducing the T5 validation sample to 20,000 users adds some noise to checkpoint selection.
 
-### Limitations of the current model
+## 8. Remaining work
 
-1. It predicts raw item IDs rather than semantic-ID codewords.
-2. The output vocabulary is very large: 163,257 classes.
-3. The generated semantic IDs are currently stored but are not used as prediction targets.
-4. The model does not yet incorporate LightGCN embeddings.
-5. The content representation is a lightweight TF-IDF/SVD approximation rather than the full pretrained text encoder used by the paper.
-
-## 5. Why change the architecture?
-
-### Change 1: Raw item IDs to semantic IDs
-
-Current problem: raw item IDs are arbitrary labels. Product IDs do not express similarity: two similar beauty products may have completely unrelated IDs.
-
-Planned change: represent each item using a short tuple of discrete semantic codewords derived from its content.
-
-```text
-Product text -> content embedding -> discrete semantic ID
-```
-
-Why this matters:
-
-- Similar products can share codeword structure.
-- The model predicts a compact structured identifier instead of one arbitrary class.
-- The model can generalize better from known products to related products.
-- The architecture becomes faithful to the central TIGER idea.
-
-### Change 2: One raw-item output head to semantic-ID output heads
-
-Current architecture:
-
-```text
-Transformer -> one 163,257-class classifier
-```
-
-Planned architecture:
-
-```text
-Transformer -> codeword head 1
-           -> codeword head 2
-           -> ...
-```
-
-Each head predicts one component of the item's semantic ID. At inference time, the predicted codeword tuple is mapped back to the corresponding product.
-
-Why this matters:
-
-- The output space is structured and compact.
-- Training is less dependent on memorizing arbitrary item labels.
-- The model can share statistical information across related products.
-
-### Change 3: Add LightGCN collaborative information
-
-Content describes what a product is. The user–item graph describes how products are used together by real users.
-
-Planned graph pipeline:
-
-```text
-Training interactions only
-          |
-          v
-      User-item graph
-          |
-          v
-        LightGCN
-          |
-          v
- Collaborative item embeddings
-```
-
-The graph embeddings will be fused with the content embeddings:
-
-```text
-fused item representation
-  = content representation
-  + weighted collaborative representation
-```
-
-Why this matters:
-
-- Content can miss behavioral relationships.
-- Graph structure captures co-interaction and collaborative preference signals.
-- The graph extension directly tests the project's research question.
-
-### Change 4: Controlled model comparisons
-
-The final experiment should compare:
-
-```text
-Popularity baseline
-Raw-ID Transformer
-Content-aware Transformer
-Semantic-ID TIGER
-Graph-enhanced semantic-ID TIGER
-```
-
-All models must use the same chronological split and evaluation metrics. This isolates whether improvements come from content, semantic IDs, or graph information.
-
-## 6. Planned architecture
-
-```text
-                         Product metadata
-                               |
-                               v
-                  Text/content representation
-                               |
-                               v
-                         Semantic IDs
-                               |
-                               |
-User history ------------------+
-       |                       |
-       v                       v
-Semantic-ID sequence       User-item graph
-       |                       |
-       |                       v
-       |                    LightGCN
-       |                       |
-       +-----------+-----------+
-                   v
-       Content + collaborative item representation
-                   |
-                   v
-            TIGER Transformer
-                   |
-                   v
-       Semantic-ID prediction heads
-                   |
-                   v
-          Decode IDs to products
-                   |
-                   v
-             Ranked recommendations
-```
-
-## 7. Remaining work
-
-1. Modify the training targets to semantic-ID components.
-2. Implement multi-head semantic-ID prediction.
-3. Decode predicted semantic IDs back to product candidates.
-4. Evaluate the semantic-ID TIGER model on the full test set.
-5. Train LightGCN using training interactions only.
-6. Fuse graph and content representations.
-7. Evaluate graph-enhanced TIGER.
-8. Create comparison tables and plots.
-9. Analyze performance by item frequency and cold-start behavior.
-
-## 8. Current conclusion
-
-The project has a working and reproducible foundation. The current content-aware raw-ID Transformer beats the popularity baseline, demonstrating that the sequential/content direction is promising.
-
-The remaining architecture changes are necessary because the research contribution is not simply training a larger Transformer. The goal is to test whether semantic item identifiers and collaborative graph information improve generative recommendation. Semantic-ID prediction addresses structured item generalization; LightGCN addresses behavioral collaboration. Together they form the planned graph-enhanced TIGER model.
-
+1. Finish the queued runs, then compare them under matching masks.
+2. Report collisions, codebook use, and results by item frequency.
+3. Optionally try other α values, chosen on validation.
+4. Prepare the presentation files.
