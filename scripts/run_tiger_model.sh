@@ -7,7 +7,6 @@ NAME="$1"; EMB="$2"; shift 2
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OUT="$ROOT/results/tiger_full/$NAME"
 PY="$ROOT/.venv/bin/python"
-BACKUP=/mnt/ncsudrive/v/vvanera/graph-tiger-backup/tiger_full
 RQVAE_EPOCHS="${RQVAE_EPOCHS:-225}"
 # A marker file drops a model from the queue without touching the running job.
 if [ -f "$ROOT/results/tiger_full/SKIP_$NAME" ]; then echo "skipping $NAME"; exit 0; fi
@@ -27,6 +26,5 @@ fi
 cd "$ROOT"
 "$PY" scripts/run_tiger_t5.py --codes "$OUT/codes.npy" --output-dir "$OUT" "$@"
 
-# A failed backup must not stop the remaining models. The drive login needs renewing overnight.
-kinit -R 2>/dev/null || true
-mkdir -p "$BACKUP/$NAME" && cp -rp "$OUT/." "$BACKUP/$NAME/" && echo "backed up $NAME" || echo "BACKUP FAILED for $NAME"
+# A failed upload must not stop the remaining models.
+"$PY" "$ROOT/scripts/hf_sync.py" push "results/tiger_full/$NAME" && echo "uploaded $NAME" || echo "UPLOAD FAILED for $NAME"

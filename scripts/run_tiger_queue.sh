@@ -4,7 +4,6 @@
 # stop the others. Progress goes to results/tiger_full/queue.log.
 cd "$(dirname "$0")/.."
 ROOT="$PWD"
-BACKUP=/mnt/ncsudrive/v/vvanera/graph-tiger-backup/tiger_full
 LOG="$ROOT/results/tiger_full/queue.log"
 mkdir -p "$(dirname "$LOG")"
 note() { echo "$(date +'%F %T') $*" | tee -a "$LOG"; }
@@ -28,8 +27,7 @@ if [ -f results/tiger_full/content/best.pt ] && [ ! -f results/tiger_full/conten
   else
     note "rerank FAILED, see results/tiger_rerank_console.log"
   fi
-  kinit -R 2>/dev/null || true
-  mkdir -p "$BACKUP/content" && cp -rp results/tiger_full/content/rerank_lightgcn "$BACKUP/content/" || note "rerank BACKUP FAILED"
+  .venv/bin/python scripts/hf_sync.py push results/tiger_full/content || note "rerank UPLOAD FAILED"
 fi
 run_model proj "$ROOT/data/processed/item_content_proj.npy"
 run_model fused "$ROOT/data/processed/item_fused_a1.npy"

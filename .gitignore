@@ -9,3 +9,5 @@ results/
 checkpoints/
 *.ipynb_checkpoints
 
+.env
+.cache/
