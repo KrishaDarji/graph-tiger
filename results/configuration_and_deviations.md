@@ -29,6 +29,8 @@ T5 training uses 344,326 sliding windows over the training histories.
 | Selection | NDCG@10 on 20,000 sampled validation users |
 | Prediction | Beam search of width 30, limited to real items |
 | Fusion, Run 2 | normalize(content + α × normalized graph), α = 1, graph term 0 for cold items |
+| Fusion, concatenation | [normalized content, normalized graph], 1536-D, graph half 0 for cold items. Same RQ-VAE layers, so the first layer maps 1536 to 512 |
+| Fusion, MLP | 1536 → 1024 → 768, ReLU, unit-norm output. Trained alone to rebuild both halves, each half's error divided by its variance, cold graph halves left out. Adam lr 1e-4, batch 1024, 5% of items held out, best of 427 epochs at 397. Then frozen |
 
 The RQ-VAE runs 225 epochs because that matches the roughly 36,000 training steps of the 5-core check.
 

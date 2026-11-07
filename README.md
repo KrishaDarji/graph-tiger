@@ -11,6 +11,10 @@ The main research model is TIGER, and the graph model is an extension. Current s
 | Run 1: simple TIGER | 768-D Sentence-T5 content | Baseline |
 | Run 2: graph-enhanced TIGER | 768-D content + alpha x 768-D LightGCN | Graph effect on semantic IDs |
 | Design A: re-ranking | None: frozen Run 1 re-scored with 64-D LightGCN | Graph effect with TIGER fixed |
+| Fusion: concatenation | 1536-D: [content, LightGCN], each normalized | Fusion method |
+| Fusion: MLP | 768-D from an MLP trained to rebuild content and LightGCN | Fusion method |
+
+Fusion results are in `presentation/tiger_fusion/RESULTS.md`.
 
 The popularity baseline, the earlier Transformer and standalone LightGCN are supporting baselines.
 
@@ -26,6 +30,10 @@ The popularity baseline, the earlier Transformer and standalone LightGCN are sup
 - `scripts/prepare_tiger_full.py` — writes the existing split in the T5 input format.
 - `scripts/build_fused_768.py` — builds the 768-D content + graph embeddings for Run 2.
 - `scripts/build_fused_embeddings.py` — builds the 64-D projected files, which the current plan does not use.
+- `scripts/build_concat_1536.py` — builds the 1536-D concatenated input for the fusion experiment.
+- `scripts/build_mlp_fused_768.py` — trains the fusion MLP and writes its 768-D output.
+- `scripts/run_tiger_fusion.sh` — trains TIGER on both fusion inputs at once.
+- `scripts/hf_sync.py` — pushes and pulls data and results through the team's private Hugging Face repo, configured in `.env`.
 
 ### TIGER with semantic IDs
 

@@ -28,6 +28,10 @@ from src.tiger_eval import CodeTable, generate_scored, score
 KS = (5, 10)
 METRICS = ["recall@5", "recall@10", "ndcg@5", "ndcg@10"]
 COMPARISONS = [("design_a", "run1"), ("run2", "run1"), ("run2", "design_a"), ("run2_through_epoch99", "run1")]
+# Fusion variants, added after the original four so those keep the same bootstrap draws.
+FUSION_RUNS = {"concat1536": "concat1536", "mlp768": "mlp768"}
+FUSION_COMPARISONS = [(new, base) for new in FUSION_RUNS for base in ("run1", "run2", "design_a")] \
+    + [("mlp768", "concat1536")]
 BUCKETS = (("degree_0", 0, 0), ("degree_1_4", 1, 4), ("degree_5_plus", 5, 10**9))
 
 
@@ -68,9 +72,12 @@ def main():
     parser.add_argument("--graph-dir", type=Path, default=ROOT / "results/lightgcn_768")
     parser.add_argument("--reps", type=int, default=2000)
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--output-dir", type=Path, help="Default: RUNS_DIR/comparison")
+    parser.add_argument("--fusion", action="store_true", help="Also compare the concat1536 and mlp768 runs")
     args = parser.parse_args()
-    output = args.runs_dir / "comparison"
-    output.mkdir(exist_ok=True)
+    output = args.output_dir or args.runs_dir / "comparison"
+    output.mkdir(parents=True, exist_ok=True)
+    comparisons = COMPARISONS + (FUSION_COMPARISONS if args.fusion else [])
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     _, frame = load_frames(args.data_dir)
     users = (frame.user.to_numpy() - 1).tolist()
@@ -107,6 +114,10 @@ def main():
     check("run1", rankings["run1"], args.runs_dir / "content/metrics_test.json", "primary_mask_train_and_validation")
     check("design_a", rankings["design_a"], args.runs_dir / "content/rerank_lightgcn768/metrics_test.json", "reranked")
     check("run2", rankings["run2"], args.runs_dir / "graph768/metrics_test.json", "primary_mask_train_and_validation")
+    if args.fusion:
+        for name, run in FUSION_RUNS.items():
+            rankings[name] = plain(scored(run, args.runs_dir / run / "best.pt"))
+            check(name, rankings[name], args.runs_dir / run / "metrics_test.json", "primary_mask_train_and_validation")
 
     values = {name: per_user(r, targets.tolist()) for name, r in rankings.items()}
     for name, v in values.items():
@@ -126,7 +137,7 @@ def main():
               "scores_by_target_degree": {n: {label: {m: float(values[n][m][(degree >= lo) & (degree <= hi)].mean())
                                                       for m in METRICS} for label, lo, hi in BUCKETS} for n in values},
               "comparisons": {}, "comparisons_by_target_degree": {}}
-    for a, b in COMPARISONS:
+    for a, b in comparisons:
         key = f"{a}_vs_{b}"
         result["comparisons"][key] = bootstrap(values[a], values[b], everyone, args.reps, rng)
         result["comparisons_by_target_degree"][key] = {

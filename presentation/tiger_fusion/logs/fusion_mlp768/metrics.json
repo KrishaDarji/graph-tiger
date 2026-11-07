@@ -1,0 +1,26 @@
+{
+  "config": {
+    "content": "data/processed/item_st5_emb.npy",
+    "graph_dir": "results/lightgcn_768",
+    "output": "data/processed/item_mlp768.npy",
+    "output_dir": "results/fusion_mlp768",
+    "hidden": 1024,
+    "lr": 0.0001,
+    "batch_size": 1024,
+    "epochs": 1000,
+    "patience": 30,
+    "holdout": 0.05,
+    "seed": 2024
+  },
+  "best_epoch": 397,
+  "holdout_r_squared": {
+    "epoch": 397,
+    "holdout_loss": 0.22692311369657775,
+    "content_non_cold": 0.9124040559842164,
+    "content_cold": 0.9280149316511537,
+    "graph_non_cold": 0.8565511153261727
+  },
+  "content_var": 0.18084995448589325,
+  "graph_var": 0.9992882609367371,
+  "output_per_dimension_variance": 0.0005054060602560639
+}
