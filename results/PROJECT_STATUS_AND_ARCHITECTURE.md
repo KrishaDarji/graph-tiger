@@ -126,9 +126,11 @@ Slide 5 of the update deck shows LightGCN entering the Transformer. That design 
 - Results come from one seed each.
 - Reducing the T5 validation sample to 20,000 users adds some noise to checkpoint selection.
 
-## 8. Remaining work
+## 8. Fusion experiments (2026-11-07)
 
-1. Finish the queued runs, then compare them under matching masks.
-2. Report collisions, codebook use, and results by item frequency.
-3. Optionally try other α values, chosen on validation.
-4. Prepare the presentation files.
+Two more ways to combine content and LightGCN before the RQ-VAE were trained with the same settings as Run 2: concatenation (1536-D) and a fusion MLP (768-D). Results are in `presentation/tiger_fusion/RESULTS.md`.
+
+## 9. Remaining work
+
+1. Extra training seeds, since several gaps between graph models are within seed noise.
+2. Optionally try other α values, chosen on validation.

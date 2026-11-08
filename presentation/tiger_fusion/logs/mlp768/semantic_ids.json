@@ -1,0 +1,16 @@
+{
+  "items": 163257,
+  "unique_full_ids": 163257,
+  "unique_prefixes": 156714,
+  "prefix_collision_rate": 0.040077913963872946,
+  "largest_prefix_group": 33,
+  "items_in_shared_prefixes": 9632,
+  "prefix_groups_over_codebook": 0,
+  "items_over_codebook": 0,
+  "max_last_code": 32,
+  "codes_used_per_level": [
+    248,
+    256,
+    256
+  ]
+}
