@@ -61,6 +61,12 @@ The popularity baseline, the earlier Transformer and standalone LightGCN are sup
 - `scripts/run_popularity_baseline.py` — popularity reference baseline.
 
 
+## Learned fusion (scalar and gate)
+
+Run 2 adds the normalized LightGCN vector to the content vector with a fixed weight (alpha = 1). We tried learning that weight instead: one scalar alpha, and a per-dimension gate that also sees the item's training degree. `scripts/learn_fusion.py` fits them on validation targets, which LightGCN never saw, then everything after fusion is the same as Run 2 (RQ-VAE, T5, seeds, stopping rule).
+
+Neither beat Run 1 or Run 2 on test. The scalar is within noise of Run 1 (N@10 0.01834 vs 0.01870, p = 0.11). The gate is about 8% worse (N@10 0.01722, p < 0.001), although it scored best on its own validation task. Results, bootstrap tests and caveats are in `presentation/tiger_fusion_learned/RESULTS.md`.
+
 ## Run the current experiments on VCL
 
 Prepare the inputs, then start the queue in `screen`. It doesn't need an open session, and it resumes if re-run. The graph model starts after Run 1 and 768-D LightGCN finish.
@@ -153,8 +159,3 @@ python scripts/run_popularity_baseline.py
 ```
 
 The scripts use `data/raw`, `data/processed`, and `results` inside this project. Large downloaded files are intentionally excluded from version control.
-
-## Project proposal
-
-The proposal is kept outside version control, in the `MLG/` context folder.
-

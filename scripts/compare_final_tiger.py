@@ -29,9 +29,10 @@ KS = (5, 10)
 METRICS = ["recall@5", "recall@10", "ndcg@5", "ndcg@10"]
 COMPARISONS = [("design_a", "run1"), ("run2", "run1"), ("run2", "design_a"), ("run2_through_epoch99", "run1")]
 # Fusion variants, added after the original four so those keep the same bootstrap draws.
-FUSION_RUNS = {"concat1536": "concat1536", "mlp768": "mlp768"}
+FUSION_RUNS = {"concat1536": "concat1536", "mlp768": "mlp768", "lscalar768": "lscalar768", "gated768": "gated768"}
 FUSION_COMPARISONS = [(new, base) for new in FUSION_RUNS for base in ("run1", "run2", "design_a")] \
-    + [("mlp768", "concat1536")]
+    + [("mlp768", "concat1536"), ("lscalar768", "concat1536"), ("gated768", "concat1536"),
+       ("lscalar768", "mlp768"), ("gated768", "mlp768"), ("gated768", "lscalar768")]
 BUCKETS = (("degree_0", 0, 0), ("degree_1_4", 1, 4), ("degree_5_plus", 5, 10**9))
 
 
@@ -73,7 +74,7 @@ def main():
     parser.add_argument("--reps", type=int, default=2000)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--output-dir", type=Path, help="Default: RUNS_DIR/comparison")
-    parser.add_argument("--fusion", action="store_true", help="Also compare the concat1536 and mlp768 runs")
+    parser.add_argument("--fusion", action="store_true", help="Also compare the concat1536, mlp768, lscalar768 and gated768 runs")
     args = parser.parse_args()
     output = args.output_dir or args.runs_dir / "comparison"
     output.mkdir(parents=True, exist_ok=True)
