@@ -1,77 +1,91 @@
 # Graph-TIGER: Amazon Beauty Recommendation
 
-This project reproduces a lightweight TIGER-style generative recommender on the Amazon Beauty dataset and studies whether collaborative graph information improves it.
+**Idea.** Modern "generative" recommenders (TIGER, RPG) give every product a short code made from its text and predict the next product's code for a user. They never see who bought what together. We add that missing signal with a graph model (LightGCN) and test whether it beats the published models.
 
-## Current scope
+## The pieces, in plain words
 
-The main research model is TIGER, and the graph model is an extension. Current status and results are in `results/PROJECT_STATUS_AND_ARCHITECTURE.md`, and settings are in `results/configuration_and_deviations.md`.
-
-| Experiment | RQ-VAE input | Purpose |
+| Piece | What it is | Why we use it |
 |---|---|---|
-| Run 1: simple TIGER | 768-D Sentence-T5 content | Baseline |
-| Run 2: graph-enhanced TIGER | 768-D content + alpha x 768-D LightGCN | Graph effect on semantic IDs |
-| Design A: re-ranking | None: frozen Run 1 re-scored with 64-D LightGCN | Graph effect with TIGER fixed |
-| Fusion: concatenation | 1536-D: [content, LightGCN], each normalized | Fusion method |
-| Fusion: MLP | 768-D from an MLP trained to rebuild content and LightGCN | Fusion method |
+| **TIGER** (Google, NeurIPS 2023) | Gives each product a 4-part code ("semantic ID") built from its title, brand and category. A small Transformer reads a user's past codes and writes the next product's code one part at a time, like writing the next word. | Similar products get similar codes, so the model can generalize and work with new products. It is the baseline we must reproduce. |
+| **RQ-VAE / RK-Means** | Two ways to turn a product's text vector into its code. RQ-VAE trains a small network. RK-Means repeats k-means on the leftovers, with nothing to tune. | The code quality limits the whole recommender. RK-Means was better and more stable for us. |
+| **RPG** (Meta, KDD 2025) | Same idea with a much longer code (32 parts) predicted all at once instead of one by one. | Faster, and published as clearly better than TIGER (Recall@10 0.081 vs 0.065). |
+| **LightGCN** | Learns from purchase history: it draws a graph of users and the products they bought, and gives products bought by the same people similar vectors. | Text cannot tell that two different products are often bought together. This can. |
+| **Gated fusion** | Adds the LightGCN vector to a product's text-based input, scaled by a learned dial between 0 (ignore the graph) and 1 (use it fully), set per product and per dimension. | The graph helps for well-known products and is useless for new ones. The dial lets the model decide. |
 
-Fusion results are in `presentation/tiger_fusion/RESULTS.md`.
+Key lesson from our two stages: putting the graph into the **codes** hurt or did nothing, while feeding it to the **model input** through a gate helped.
 
-The popularity baseline, the earlier Transformer and standalone LightGCN are supporting baselines.
+## What we did
 
-## Implementation files
+1. **Full-data study (Vivek, Janam).** Our own split of 147,241 users and 163,257 items. TIGER on text only (Run 1), text plus graph in the codes (Run 2, concatenation, MLP, learned scalar, learned gate), and re-ranking with LightGCN. Putting the graph into the codes helped little (best: MLP fusion, +4% NDCG@10) and the learned gate was 8% worse. Details: `presentation/tiger_full`, `tiger_fusion`, `tiger_fusion_learned`.
+2. **Paper-protocol study (Janam).** The published TIGER numbers use a different dataset version (5-core, 22,363 users), so stage 1 cannot be compared to them. We rebuilt TIGER from the paper on that data, added Meta's official RPG as a stronger baseline, and tested LightGCN inside RPG. Details: `presentation/paper_repro/RESULTS.md`.
 
-### Data and preprocessing
+## Results (test, Recall@10 / NDCG@10)
 
-- `scripts/prepare_data.py` — downloads and preprocesses Amazon Beauty interactions.
-- `scripts/create_split.py` — creates the chronological train/validation/test split.
-- `src/data.py` — data loading, ID encoding, and chronological splitting utilities.
-- `scripts/prepare_metadata.py` — builds the older TF-IDF embeddings and codes used by the earlier prototype.
-- `scripts/embed_items_st5.py` and `src/item_text.py` — encode item text with Sentence-T5.
-- `scripts/prepare_tiger_full.py` — writes the existing split in the T5 input format.
-- `scripts/build_fused_768.py` — builds the 768-D content + graph embeddings for Run 2.
-- `scripts/build_fused_embeddings.py` — builds the 64-D projected files, which the current plan does not use.
-- `scripts/build_concat_1536.py` — builds the 1536-D concatenated input for the fusion experiment.
-- `scripts/build_mlp_fused_768.py` — trains the fusion MLP and writes its 768-D output.
-- `scripts/run_tiger_fusion.sh` — trains TIGER on both fusion inputs at once.
-- `scripts/hf_sync.py` — pushes and pulls data and results through the team's private Hugging Face repo, configured in `.env`.
+5-core Beauty, the paper's setting:
 
-### TIGER with semantic IDs
+| Model | Who | R@10 | N@10 |
+|---|---|---:|---:|
+| TIGER, paper (3-seed mean) | Google | 0.0642 | 0.0374 |
+| TIGER, our T5 + RQ-VAE (3 seeds) | Janam | 0.0546 | 0.0294 |
+| TIGER, upstream code check (1 seed) | Vivek | 0.0580 | 0.0301 |
+| TIGER, our T5 + RK-Means (3 seeds) | Janam | 0.0583 | 0.0310 |
+| RPG, official code (3 seeds) | Meta, run by Janam | 0.0736 | 0.0426 |
+| RPG-style, no graph (6 seeds) | Janam | 0.0725 | 0.0418 |
+| **RPG-style + LightGCN gated (6 seeds)** | Janam | **0.0767** | **0.0436** |
+| RPG, paper (OpenAI text embeddings) | Meta | 0.0809 | 0.0464 |
 
-- `third_party/xiaolongtao_tiger/` — upstream RQ-VAE and T5 code, with changes listed in `UPSTREAM.md`.
-- `scripts/run_tiger_model.sh` — trains one model: RQ-VAE, semantic IDs, T5, backup.
-- `scripts/run_tiger_queue.sh` and `scripts/run_tiger_graph768.sh` — run the queued experiments.
-- `scripts/run_tiger_t5.py` and `src/tiger_eval.py` — T5 training, lookup table, constrained beam search and scoring.
-- `scripts/rerank_tiger_lightgcn.py` — Design A re-ranking.
-- `scripts/analyze_semantic_ids.py` — reports collisions and codebook use.
-- `scripts/prepare_tiger_5core.py` and `scripts/run_tiger_5core.sh` — the 5-core code check.
-- `scripts/draw_architecture.py` — draws the architecture figure.
+Project data (147,241 users, not comparable with the table above), one seed each:
 
-### Earlier raw-ID prototype
+| Model | Who | R@10 | N@10 |
+|---|---|---:|---:|
+| Run 1: text only | Vivek | 0.0334 | 0.0187 |
+| Run 2: graph added in the codes | Vivek | 0.0336 | 0.0193 |
+| Concatenation / MLP fusion | Vivek | 0.0340 / 0.0341 | 0.0190 / 0.0194 |
+| Learned scalar / learned gate | Janam | 0.0330 / 0.0307 | 0.0183 / 0.0172 |
 
-- `src/tiger_small.py` — defines the lightweight Transformer architecture.
-- `scripts/run_tiger_small.py` — trains the content-aware next-item model.
-- `scripts/run_tiger_small.sbatch` — Hazel Slurm training script with checkpoint/resume support.
-- `scripts/evaluate_tiger_checkpoint.py` — evaluates a saved checkpoint using Recall and NDCG.
+- Our TIGER reaches about 85% of the paper, and so do the paper's own ID ablations (random and LSH IDs), so the gap is in unstated training details, not the codes. Seven fixes were tried without effect (`RESULTS.md`).
+- Gated LightGCN improves our RPG-style model by 5.8% Recall@10 (p = 0.0014, better in 6 of 6 seeds) and edges past official RPG with the same text encoder (Sentence-T5-base).
+- We are not at the published state of the art yet (RPG 0.0809, ACERec 0.0841).
 
-### Evaluation and graph extension
+## Next steps
 
-- `src/evaluation.py` — implements Recall@K and NDCG@K.
-- `src/lightgcn.py` — LightGCN model and normalized user–item graph construction.
-- `scripts/run_lightgcn.py` — trains the planned graph-based extension.
-- `scripts/run_popularity_baseline.py` — popularity reference baseline.
+1. Replace Sentence-T5 with a stronger open text encoder (Qwen3-Embedding, BGE or GTE large). RPG's paper suggests this is worth roughly 7%.
+2. Try the long-ID ideas of newer models (merging a long code into one token per product, a dedicated prediction token), one at a time.
+3. Test a deeper or larger LightGCN as the graph source.
+4. Final tables with 5 seeds per setting and paired significance tests; cold-start (new product) breakdown.
 
+## Repository
 
-## Learned fusion (scalar and gate)
+- `src/` — data, evaluation, LightGCN (`lightgcn.py`) and the paper-style T5 TIGER (`src/tiger/`).
+- `scripts/paper/` — paper-protocol experiments: `embed_items.py` (text vectors), `rqvae.py`, `rkmeans.py` (codes), `lightgcn5.py`, `train_t5.py` (TIGER), `pgen.py` (RPG-style model, `--graph gate` adds LightGCN), `run_all.sh`, `summarize.py`.
+- `scripts/` (rest) — full-data experiments: data prep, `run_tiger_*.sh`, `run_lightgcn.py`, fusion builders, `learn_fusion.py`, `hf_sync.py` (private Hugging Face sync, configured in `.env`).
+- `third_party/xiaolongtao_tiger/` — upstream RQ-VAE and T5 code used for Vivek's runs (changes in `UPSTREAM.md`).
+- `presentation/` — result tables and logs. Large files (embeddings, checkpoints) are not in git.
 
-Run 2 adds the normalized LightGCN vector to the content vector with a fixed weight (alpha = 1). We tried learning that weight instead: one scalar alpha, and a per-dimension gate that also sees the item's training degree. `scripts/learn_fusion.py` fits them on validation targets, which LightGCN never saw, then everything after fusion is the same as Run 2 (RQ-VAE, T5, seeds, stopping rule).
-
-Neither beat Run 1 or Run 2 on test. The scalar is within noise of Run 1 (N@10 0.01834 vs 0.01870, p = 0.11). The gate is about 8% worse (N@10 0.01722, p < 0.001), although it scored best on its own validation task. Results, bootstrap tests and caveats are in `presentation/tiger_fusion_learned/RESULTS.md`.
-
-## Run the current experiments on VCL
-
-Prepare the inputs, then start the queue in `screen`. It doesn't need an open session, and it resumes if re-run. The graph model starts after Run 1 and 768-D LightGCN finish.
+## Setup
 
 ```bash
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt faiss-cpu
+python scripts/check_device.py
+```
+
+## Run
+
+Paper-protocol experiments (5-core Beauty, one GPU, about 8 hours in total). It downloads the data, and skips finished steps when re-run. Use `screen` so it survives a disconnect:
+
+```bash
+screen -dmS paper bash -c 'bash scripts/paper/run_all.sh > logs_paper.txt 2>&1'
+```
+
+Official RPG baseline (separate environment, its own repo https://github.com/facebookresearch/RPG_KDD2025): set `sent_emb_model: sentence-transformers/sentence-t5-base`, `sent_emb_dim: 768`, `sent_emb_pca: 128` in `genrec/models/RPG/config.yaml`, then
+`python main.py --category=Beauty --lr=0.01 --temperature=0.03 --n_codebook=32 --num_beams=20 --n_edges=200 --propagation_steps=3`.
+
+Full-data experiments on VCL (the queue resumes if re-run):
+
+```bash
+python scripts/prepare_data.py --download
+python scripts/create_split.py
 python scripts/embed_items_st5.py --dataset full
 python scripts/prepare_tiger_full.py
 python scripts/run_lightgcn.py --dim 768 --output-dir results/lightgcn_768
@@ -79,83 +93,8 @@ screen -dmS tiger_queue bash -c 'scripts/run_tiger_queue.sh'
 screen -dmS tiger_graph768 bash -c 'scripts/run_tiger_graph768.sh'
 ```
 
-Progress is in `results/tiger_full/queue.log`. Run 1 re-ranking needs `results/lightgcn` from the 64-D LightGCN run. A file `results/tiger_full/SKIP_<name>` drops a model from the queue, and `queue.log` still shows it as done.
+Progress is in `results/tiger_full/queue.log`. LightGCN: `screen -dmS lightgcn bash -c 'scripts/run_lightgcn.sh > results/lightgcn_console.log 2>&1'`; outputs in `results/lightgcn/` (row `i` of `item_emb.npy` is `item_idx` `i`), results in `presentation/lightgcn/RESULTS.md`. Models and results can be pushed to or pulled from the team's private Hugging Face repo with `python scripts/hf_sync.py push|pull <paths>`.
 
-## Build the earlier TF-IDF representations and codes
+## Earlier work (kept for reference)
 
-After the interaction data has been prepared:
-
-```bash
-python scripts/prepare_metadata.py
-```
-
-This creates `data/processed/item_content_semantic_ids.pkl`. It is a
-lightweight, reproducible approximation of TIGER's semantic-ID stage using
-TF-IDF, SVD, and residual quantization. The later experiment will use these
-representations in the content-only and graph-enhanced models.
-
-## Run the earlier raw-ID prototype
-
-On the MacBook:
-
-```bash
-python scripts/run_tiger_small.py --epochs 3 --limit 50000 --eval-limit 1000
-
-# Content-aware TIGER prototype
-python scripts/run_tiger_small.py --epochs 3 --limit 50000 --eval-limit 1000 --use-content
-```
-
-For a full run on a CUDA machine:
-
-```bash
-python scripts/run_tiger_small.py --epochs 5 --batch-size 256 --eval-limit 0
-```
-
-On Hazel, copy the project and environment to the cluster, edit the account,
-partition, and module setup in `scripts/run_tiger_small.sbatch`, then submit:
-
-```bash
-mkdir -p logs
-sbatch scripts/run_tiger_small.sbatch
-```
-
-## Train LightGCN on VCL
-
-Requires the split files and content file in `data/processed`. VCL has no job
-scheduler, so run inside `screen`. The script resumes from `results/lightgcn/last.pt`
-if a session drops. It refuses to start once `metrics_test.json` exists, so that the
-test split is only evaluated once per output directory.
-
-```bash
-screen -dmS lightgcn bash -c 'scripts/run_lightgcn.sh > results/lightgcn_console.log 2>&1'
-```
-
-Outputs go to `results/lightgcn/`. LightGCN row `i` in `item_emb.npy` is `item_idx`
-`i`, and row `i` of `item_content_semantic_ids.pkl`. The Transformer's token for the
-same item is `i + 1`. Results and fusion guidance are in
-`presentation/lightgcn/RESULTS.md`; `scripts/plot_lightgcn_curves.py` regenerates the
-presentation files.
-
-## Setup
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-```
-
-Check the available accelerator:
-
-```bash
-python scripts/check_device.py
-```
-
-## Run the first milestone
-
-```bash
-python scripts/prepare_data.py --download
-python scripts/run_popularity_baseline.py
-```
-
-The scripts use `data/raw`, `data/processed`, and `results` inside this project. Large downloaded files are intentionally excluded from version control.
+A TF-IDF semantic-ID prototype (`scripts/prepare_metadata.py`) and a small raw-ID Transformer (`src/tiger_small.py`, `scripts/run_tiger_small.py`) came first and are superseded. A 5-core code check of Vivek's pipeline is in `presentation/tiger_5core/RESULTS.md`. Status and settings of the full-data runs: `results/PROJECT_STATUS_AND_ARCHITECTURE.md`, `results/configuration_and_deviations.md`.

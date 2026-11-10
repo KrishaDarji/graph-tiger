@@ -5,6 +5,7 @@ __pycache__/
 data/raw/
 data/processed/
 data/tiger_5core/
+data/paper/
 results/
 checkpoints/
 *.ipynb_checkpoints
