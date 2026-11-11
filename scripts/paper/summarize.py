@@ -9,7 +9,7 @@ root = Path(sys.argv[1] if len(sys.argv) > 1 else "results/paper")
 keys = ["recall@5", "ndcg@5", "recall@10", "ndcg@10"]
 groups = {}
 for d in sorted(root.iterdir()):
-    if d.name.startswith("pgen_") and (d / "result.json").exists():
+    if d.name.startswith(("pgen_", "ace_")) and (d / "result.json").exists():
         row = [json.load(open(d / "result.json"))["test"][k] for k in keys]
         name = re.sub(r"_s\d+$", "", d.name)
     elif d.name.startswith("t5_") and (d / "metrics_test.json").exists():

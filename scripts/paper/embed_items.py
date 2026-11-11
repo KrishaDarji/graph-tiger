@@ -5,6 +5,7 @@ import ast
 from pathlib import Path
 
 import numpy as np
+import torch
 from sentence_transformers import SentenceTransformer
 
 p = argparse.ArgumentParser()
@@ -12,6 +13,7 @@ p.add_argument("--reviews", required=True)
 p.add_argument("--meta", required=True)
 p.add_argument("--model", default="sentence-transformers/sentence-t5-base")
 p.add_argument("--out", required=True)
+p.add_argument("--bf16", action="store_true")
 args = p.parse_args()
 
 items = []
@@ -39,7 +41,8 @@ def sentence(row):
 
 
 texts = [sentence(meta[a]) for a in items]
-emb = SentenceTransformer(args.model).encode(texts, batch_size=64, convert_to_numpy=True)
+model = SentenceTransformer(args.model, model_kwargs={"torch_dtype": torch.bfloat16} if args.bf16 else {})
+emb = model.encode(texts, batch_size=32, convert_to_numpy=True)
 out = Path(args.out)
 out.mkdir(parents=True, exist_ok=True)
 np.save(out / "emb.npy", emb.astype(np.float32))

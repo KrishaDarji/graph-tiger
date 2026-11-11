@@ -48,3 +48,32 @@ Details we followed: 4 + 4 layers, 6 heads of 64, d_model 128, d_ff 1024, ReLU, 
 - TIGER variants other than the 3-seed rows use one seed.
 - LightGCN here is the 64-D, 2-layer model trained on 5-core training edges (validation recall@10 0.0683).
 - Checkpoints and early stopping were chosen on validation only, never on test.
+
+## Stronger text encoders and ACERec-style components (Nov 2026)
+
+Same data and protocol, RPG-style model, test R@10 / N@10. Per-run numbers: `runs.json`, means: `summary.txt`.
+
+| Text encoder (vectors reduced to 128-d) | Seeds | No graph | With gated LightGCN |
+|---|---:|---|---|
+| Sentence-T5-base | 6 | 0.0725 / 0.0418 | 0.0767 / 0.0436 |
+| Qwen3-Embedding 0.6B | 2 | 0.0724 / 0.0416 | not run |
+| BGE-large | 2 | 0.0727 / 0.0418 | not run |
+| Qwen3-Embedding 4B | 2 (3 with gate) | 0.0739 / 0.0426 | 0.0775 / 0.0436 |
+| Qwen3-Embedding 8B | 4 | 0.0739 / 0.0431 | 0.0765 / 0.0436 |
+
+A larger encoder helps a little without the graph (about +2%) and nothing once the gate is on, at 5x the vector storage and a large one-off embedding pass. We keep Sentence-T5-base.
+
+ACERec-style components, our reimplementation (`scripts/paper/ace.py`), seed 2024, one run each:
+
+| Variant | R@10 | N@10 |
+|---|---:|---:|
+| Same architecture, none of the components (check) | 0.0742 | 0.0427 |
+| Intent token | 0.0663 | 0.0392 |
+| Token merger | 0.0635 | 0.0369 |
+| Merger + intent | 0.0677 | 0.0400 |
+| Merger + intent + alignment loss (0.01) | 0.0692 | 0.0412 |
+| Intent + alignment loss | 0.0678 | 0.0407 |
+| Merger + intent + alignment loss + gate | 0.0750 | 0.0445 |
+| Merger + intent + gate | 0.0732 | 0.0424 |
+
+None of the components beat the plain architecture on Beauty (16.5M vs 14.0M parameters). The alignment-loss weight 0.05 run ran out of GPU memory and was not repeated. Built from the paper text without the authors' code, so a different result from theirs does not show their method fails.

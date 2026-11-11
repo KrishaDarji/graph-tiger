@@ -49,15 +49,17 @@ Project data (147,241 users, not comparable with the table above), one seed each
 
 ## Next steps
 
-1. Replace Sentence-T5 with a stronger open text encoder (Qwen3-Embedding, BGE or GTE large). RPG's paper suggests this is worth roughly 7%.
-2. Try the long-ID ideas of newer models (merging a long code into one token per product, a dedicated prediction token), one at a time.
-3. Test a deeper or larger LightGCN as the graph source.
-4. Final tables with 5 seeds per setting and paired significance tests; cold-start (new product) breakdown.
+Tried and dropped: larger text encoders (Qwen3, BGE: no gain once the graph gate is on) and ACERec-style merger, intent token and alignment loss (worse than the plain model on Beauty). See `presentation/paper_repro/RESULTS.md`.
+
+1. Tune the training recipe of the gated model (learning rate, batch size, dropout, sliding-window targets). Costs no parameters.
+2. A better graph source: larger LightGCN, or a graph built from item-to-item transitions in the sequences.
+3. Use the graph at scoring time as well (add a graph similarity term to the item score).
+4. Cost table (parameters, training time, inference latency) against TIGER and ACERec, final tables with 5 seeds and paired tests, cold-start breakdown.
 
 ## Repository
 
 - `src/` — data, evaluation, LightGCN (`lightgcn.py`) and the paper-style T5 TIGER (`src/tiger/`).
-- `scripts/paper/` — paper-protocol experiments: `embed_items.py` (text vectors), `rqvae.py`, `rkmeans.py` (codes), `lightgcn5.py`, `train_t5.py` (TIGER), `pgen.py` (RPG-style model, `--graph gate` adds LightGCN), `run_all.sh`, `summarize.py`.
+- `scripts/paper/` — paper-protocol experiments: `embed_items.py` (text vectors), `rqvae.py`, `rkmeans.py` (codes), `lightgcn5.py`, `train_t5.py` (TIGER), `pgen.py` (RPG-style model, `--graph gate` adds LightGCN), `ace.py` (ACERec-style components), `run_all.sh`, `summarize.py`.
 - `scripts/` (rest) — full-data experiments: data prep, `run_tiger_*.sh`, `run_lightgcn.py`, fusion builders, `learn_fusion.py`, `hf_sync.py` (private Hugging Face sync, configured in `.env`).
 - `third_party/xiaolongtao_tiger/` — upstream RQ-VAE and T5 code used for Vivek's runs (changes in `UPSTREAM.md`).
 - `presentation/` — result tables and logs. Large files (embeddings, checkpoints) are not in git.
