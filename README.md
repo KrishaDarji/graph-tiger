@@ -31,7 +31,8 @@ Key lesson from our two stages: putting the graph into the **codes** hurt or did
 | TIGER, our T5 + RK-Means (3 seeds) | Janam | 0.0583 | 0.0310 |
 | RPG, official code (3 seeds) | Meta, run by Janam | 0.0736 | 0.0426 |
 | RPG-style, no graph (6 seeds) | Janam | 0.0725 | 0.0418 |
-| **RPG-style + LightGCN gated (6 seeds)** | Janam | **0.0767** | **0.0436** |
+| RPG-style + LightGCN gated (6 seeds) | Janam | 0.0767 | 0.0436 |
+| **RPG-style + transition graph + dense loss + EMA (5 seeds)** | Janam | **0.0927** | **0.0527** |
 | RPG, paper (OpenAI text embeddings) | Meta | 0.0809 | 0.0464 |
 
 Project data (147,241 users, not comparable with the table above), one seed each:
@@ -45,21 +46,23 @@ Project data (147,241 users, not comparable with the table above), one seed each
 
 - Our TIGER reaches about 85% of the paper, and so do the paper's own ID ablations (random and LSH IDs), so the gap is in unstated training details, not the codes. Seven fixes were tried without effect (`RESULTS.md`).
 - Gated LightGCN improves our RPG-style model by 5.8% Recall@10 (p = 0.0014, better in 6 of 6 seeds) and edges past official RPG with the same text encoder (Sentence-T5-base).
-- We are not at the published state of the art yet (RPG 0.0809, ACERec 0.0841).
+- The final model (5 seeds, raw full ranking, same protocol as the papers) is above the published RPG (0.0809 / 0.0464) and ACERec (0.0841 / 0.0501) on Recall and NDCG at 5 and 10, with 13.9M parameters and about 0.2 ms per user. It uses collaborative statistics from the training data, which those content-only models do not. Details, ablations, cost and the cold-start limit: `presentation/paper_repro/RESULTS.md`; evaluation rules: `presentation/paper_repro/EVAL_PROTOCOL.md`.
+
+Other datasets (test, raw full ranking, R@10 / N@10; Sports and Toys 5 seeds, CDs 3 seeds): Sports 0.0553 / 0.0301 (RPG paper 0.0463 / 0.0263, ACERec 0.0493 / 0.0280); Toys 0.0962 / 0.0547 (RPG 0.0869 / 0.0490, ACERec 0.0916 / 0.0579, so ACERec is ahead on N@10 and at cutoff 5); CDs 0.0956 / 0.0499 (RPG 0.0735 / 0.0415, TIGER 0.0748 / 0.0411). Plain RPG-style, SASRec and cold-start numbers: `presentation/paper_repro/RESULTS.md`, `COLD_START.md`.
 
 ## Next steps
 
-Tried and dropped: larger text encoders (Qwen3, BGE: no gain once the graph gate is on) and ACERec-style merger, intent token and alignment loss (worse than the plain model on Beauty). See `presentation/paper_repro/RESULTS.md`.
+Tried and dropped: larger text encoders (no gain once a graph input is used), ACERec-style merger, intent token and alignment loss (worse on Beauty), trainable or dropped-out graph vectors.
 
-1. Tune the training recipe of the gated model (learning rate, batch size, dropout, sliding-window targets). Costs no parameters.
-2. A better graph source: larger LightGCN, or a graph built from item-to-item transitions in the sequences.
-3. Use the graph at scoring time as well (add a graph similarity term to the item score).
-4. Cost table (parameters, training time, inference latency) against TIGER and ACERec, final tables with 5 seeds and paired tests, cold-start breakdown.
+1. Cold start: items never seen in training are almost never recommended (Recall@10 below 1%). A content-plus-graph nearest-neighbour path ranks new items against each other best (cold-pool Recall@10 0.27 vs 0.23 for our model); a deployable system needs it as a separate slot (`COLD_START.md`).
+2. Toys NDCG gap to ACERec (N@5 -11.5%, N@10 -5.5%) is unsolved; CDs needs a like-for-like baseline and longer training (all seeds hit the epoch cap).
+3. Graph refresh needs fine-tuning: swapping in a new graph without retraining does not work (`RESULTS.md`).
+4. Learn the transition graph end to end instead of a fixed SVD.
 
 ## Repository
 
-- `src/` — data, evaluation, LightGCN (`lightgcn.py`) and the paper-style T5 TIGER (`src/tiger/`).
-- `scripts/paper/` — paper-protocol experiments: `embed_items.py` (text vectors), `rqvae.py`, `rkmeans.py` (codes), `lightgcn5.py`, `train_t5.py` (TIGER), `pgen.py` (RPG-style model, `--graph gate` adds LightGCN), `ace.py` (ACERec-style components), `run_all.sh`, `summarize.py`.
+- `src/` — data, evaluation (`evalkit.py` is the one evaluator for all current results), LightGCN (`lightgcn.py`) and the paper-style T5 TIGER (`src/tiger/`).
+- `scripts/paper/` — paper-protocol experiments: `embed_items.py` (text vectors), `rqvae.py`, `rkmeans.py` (codes), `lightgcn5.py`, `train_t5.py` (TIGER), `pgen.py` (RPG-style model, `--graph gate` adds LightGCN), `gen.py` (current model: shared evaluator, dense loss, EMA, cold-start holdout), `svd_graph.py` (transition-graph item vectors), `baselines.py`, `sasrec.py` (full-softmax SASRec through the same evaluator), `cold_baselines.py`, `impute_graph.py`, `overfit_report.py`, `final_report.py` (5-seed tables and paired tests), `ace.py` (ACERec-style components), `run_all.sh`, `summarize.py`.
 - `scripts/` (rest) — full-data experiments: data prep, `run_tiger_*.sh`, `run_lightgcn.py`, fusion builders, `learn_fusion.py`, `hf_sync.py` (private Hugging Face sync, configured in `.env`).
 - `third_party/xiaolongtao_tiger/` — upstream RQ-VAE and T5 code used for Vivek's runs (changes in `UPSTREAM.md`).
 - `presentation/` — result tables and logs. Large files (embeddings, checkpoints) are not in git.
