@@ -52,6 +52,8 @@ def temporal_windows(df, idx, q1, q2, train_end="val"):
 @dataclass
 class Split:
     train: list
+    last_only: list  # True for sliding windows that only train on their last item
+    seen: np.ndarray  # items that occur in a training prefix
     val_hist: list
     val_target: list
     test_hist: list
@@ -59,18 +61,32 @@ class Split:
     count: np.ndarray
 
 
+def windows(seq, max_len):
+    # as in RPG: one window over the first max_len+1 items trains on every position, later sliding windows on their last item only
+    rows = [(seq[:max_len + 1], False)]
+    rows += [(seq[i:i + max_len + 1], True) for i in range(1, max(len(seq) - max_len, 1))]
+    return rows
+
+
 def build_split(df, idx, max_len, holdout=frozenset(), temporal=None, train_end="val"):
     n = len(idx)
     if temporal:
         w = temporal_windows(df, idx, *temporal, train_end)
-        count = np.bincount([i for t in w["train"] for i in t], minlength=n)
-        return Split([t[-(max_len + 1):] for t in w["train"]], [h[-max_len:] for h in w["val_hist"]], w["val_target"],
-                     [h[-max_len:] for h in w["test_hist"]], w["test_target"], count)
-    seqs = [[idx[a] for a in s] for s in user_sequences(df).values()]
-    train = [[i for i in s[:-2] if i not in holdout][-(max_len + 1):] for s in seqs]
-    count = np.bincount([i for s in seqs for i in s[:-2]], minlength=n)
-    return Split([t for t in train if len(t) >= 2], [s[:-2][-max_len:] for s in seqs], [s[-2] for s in seqs],
-                 [s[:-1][-max_len:] for s in seqs], [s[-1] for s in seqs], count)
+        prefixes = w["train"]
+        count = np.bincount([i for t in prefixes for i in t], minlength=n)
+        val_hist, val_target, test_hist, test_target = w["val_hist"], w["val_target"], w["test_hist"], w["test_target"]
+    else:
+        seqs = [[idx[a] for a in s] for s in user_sequences(df).values()]
+        prefixes = [[i for i in s[:-2] if i not in holdout] for s in seqs]
+        count = np.bincount([i for s in seqs for i in s[:-2]], minlength=n)
+        val_hist, val_target, test_hist, test_target = [s[:-2] for s in seqs], [s[-2] for s in seqs], [s[:-1] for s in seqs], [s[-1] for s in seqs]
+    prefixes = [t for t in prefixes if len(t) >= 2]
+    rows = [r for t in prefixes for r in windows(t, max_len)]
+    seen = np.zeros(n, dtype=bool)
+    for t in prefixes:
+        seen[t] = True
+    return Split([r for r, _ in rows], [f for _, f in rows], seen, [h[-max_len:] for h in val_hist], val_target,
+                 [h[-max_len:] for h in test_hist], test_target, count)
 
 
 def pad(rows, length, fill=0):

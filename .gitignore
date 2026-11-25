@@ -9,6 +9,4 @@ logs/
 ckpt/
 notes/
 *.npy
-*.pptx
-Restore/
 reports/
