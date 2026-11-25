@@ -1,37 +1,80 @@
-"""Data loading and chronological user-item splitting."""
+import gzip
+import json
+from dataclasses import dataclass
 from pathlib import Path
+
+import numpy as np
 import pandas as pd
+import torch
 
 
-def load_interactions(path="data/processed/interactions.parquet"):
-    df = pd.read_parquet(path)
-    return df.sort_values(["user_id", "timestamp"]).reset_index(drop=True)
+def load_reviews(path):
+    opener = gzip.open if str(path).endswith(".gz") else open
+    with opener(path, "rt", encoding="utf-8") as f:
+        rows = [(r["reviewerID"], r["asin"], r["unixReviewTime"]) for r in map(json.loads, filter(str.strip, f))]
+    return pd.DataFrame(rows, columns=["user", "item", "time"])
 
 
-def encode_ids(df):
-    result = df.copy()
-    result["user_idx"], user_values = pd.factorize(result["user_id"])
-    result["item_idx"], item_values = pd.factorize(result["item_id"])
-    return result, list(user_values), list(item_values)
+def load_items(path):
+    items = Path(path).read_text().split()
+    return items, {a: i for i, a in enumerate(items)}
 
 
-def chronological_split(df):
-    groups = df.groupby("user_idx", sort=False)
-    train = groups.head(-2).copy()
-    validation = groups.tail(2).groupby("user_idx", sort=False).nth(0).reset_index()
-    test = groups.tail(1).reset_index(drop=True)
-    return train, validation, test
+def user_sequences(df):
+    df = df.iloc[np.argsort(df["time"].to_numpy(), kind="stable")]
+    return {u: g.tolist() for u, g in df.groupby("user", sort=False)["item"]}
 
 
-def save_split(df, output_dir="data/processed"):
-    output = Path(output_dir)
-    output.mkdir(parents=True, exist_ok=True)
-    encoded, users, items = encode_ids(df)
-    train, validation, test = chronological_split(encoded)
-    train.to_parquet(output / "train.parquet", index=False)
-    validation.to_parquet(output / "validation.parquet", index=False)
-    test.to_parquet(output / "test.parquet", index=False)
-    print(f"Train: {len(train):,}; validation: {len(validation):,}; test: {len(test):,}")
-    print(f"Users: {len(users):,}; items: {len(items):,}")
-    return train, validation, test, len(users), len(items)
+def temporal_windows(df, idx, q1, q2, train_end="val"):
+    # train before the q1 time quantile, validate on each user's first interaction in [q1, q2), test on the first after q2
+    df = df.iloc[np.argsort(df["time"].to_numpy(), kind="stable")]
+    t1, t2 = np.quantile(df["time"].to_numpy(), [q1, q2])
+    users = {}
+    for u, a, t in zip(df["user"].to_numpy(), df["item"].to_numpy(), df["time"].to_numpy()):
+        users.setdefault(u, []).append((idx[a], t))
+    out = {k: [] for k in ("train", "val_hist", "val_target", "test_hist", "test_target")}
+    for seq in users.values():
+        pre = [i for i, t in seq if t < t1]
+        win = [i for i, t in seq if t1 <= t < t2]
+        post = [i for i, t in seq if t >= t2]
+        train = pre if train_end == "val" else pre + win
+        if len(train) >= 2:
+            out["train"].append(train)
+        if pre and win:
+            out["val_hist"].append(pre)
+            out["val_target"].append(win[0])
+        if (pre or win) and post:
+            out["test_hist"].append(pre + win)
+            out["test_target"].append(post[0])
+    return out
 
+
+@dataclass
+class Split:
+    train: list
+    val_hist: list
+    val_target: list
+    test_hist: list
+    test_target: list
+    count: np.ndarray
+
+
+def build_split(df, idx, max_len, holdout=frozenset(), temporal=None, train_end="val"):
+    n = len(idx)
+    if temporal:
+        w = temporal_windows(df, idx, *temporal, train_end)
+        count = np.bincount([i for t in w["train"] for i in t], minlength=n)
+        return Split([t[-(max_len + 1):] for t in w["train"]], [h[-max_len:] for h in w["val_hist"]], w["val_target"],
+                     [h[-max_len:] for h in w["test_hist"]], w["test_target"], count)
+    seqs = [[idx[a] for a in s] for s in user_sequences(df).values()]
+    train = [[i for i in s[:-2] if i not in holdout][-(max_len + 1):] for s in seqs]
+    count = np.bincount([i for s in seqs for i in s[:-2]], minlength=n)
+    return Split([t for t in train if len(t) >= 2], [s[:-2][-max_len:] for s in seqs], [s[-2] for s in seqs],
+                 [s[:-1][-max_len:] for s in seqs], [s[-1] for s in seqs], count)
+
+
+def pad(rows, length, fill=0):
+    out = torch.full((len(rows), length), fill, dtype=torch.long)
+    for i, r in enumerate(rows):
+        out[i, :len(r)] = torch.tensor(r)
+    return out
