@@ -9,7 +9,7 @@ from .tokens import K
 class Decoder(nn.Module):
     """RPG-style decoder: item = mean of its digit embeddings (+ gated graph vector), one cosine head per digit."""
 
-    def __init__(self, codes, graph=None, dim=448, layers=2, heads=4, ffn=1024, drop=0.5, max_len=50, temp=0.03):
+    def __init__(self, codes, graph=None, dim=448, layers=2, heads=4, ffn=1024, drop=0.5, max_len=50, temp=0.03, graph_input=True):
         super().__init__()
         self.n_items, self.digits, self.temp = len(codes), codes.shape[1], temp
         self.register_buffer("codes", codes, persistent=False)
@@ -22,7 +22,8 @@ class Decoder(nn.Module):
         for h in self.heads:
             nn.init.zeros_(h.weight)
         self.register_buffer("graph", graph.clone() if graph is not None else None)
-        if graph is not None:
+        self.gated = graph is not None and graph_input  # a graph kept without graph_input is only used to re-rank scores
+        if self.gated:
             self.proj = nn.Linear(graph.shape[1], dim)
             self.gate = nn.Linear(dim + graph.shape[1], dim)
 
@@ -32,7 +33,7 @@ class Decoder(nn.Module):
 
     def item_emb(self, ids):
         e = self.wte(self.tokens[ids]).mean(-2)
-        if self.graph is None:
+        if not self.gated:
             return e
         g = self.graph[ids]
         return e + torch.sigmoid(self.gate(torch.cat([e, g], -1))) * self.proj(g)

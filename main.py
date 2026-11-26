@@ -30,6 +30,7 @@ def parse():
     p.add_argument("--init", default="", help="start from saved weights (fine-tune); the graph comes from --graph-emb")
 
     p.add_argument("--no-graph", action="store_true", help="plain RPG-style model without collaborative input")
+    p.add_argument("--rerank-graph", default="", help="plain model; this graph is only used to re-rank the scores (see --gammas)")
     p.add_argument("--token-graph", type=float, default=0.0, help="weight of the graph vector inside the vectors that are quantised into codes")
     p.add_argument("--pca", type=int, default=128)
     p.add_argument("--digits", type=int, default=32)
@@ -85,7 +86,7 @@ def main():
     items, idx = load_items(a.items or d / "items.txt")
     n = len(items)
     graph_path = a.graph_emb or d / "graph.npy"
-    graph = None if a.no_graph else load_graph(graph_path, dev)
+    graph = load_graph(a.rerank_graph, dev) if a.rerank_graph else (None if a.no_graph else load_graph(graph_path, dev))
 
     holdout = set(np.load(a.holdout).tolist()) if a.holdout else set()
     temporal = tuple(floats(a.temporal)) if a.temporal else None
@@ -99,7 +100,7 @@ def main():
     cold_eval = holdout or ({i for i in range(n) if not split.seen[i]} if temporal else set())
     print(len(split.train), "train users,", len(split.val_hist), "val,", len(split.test_hist), "test", flush=True)
 
-    model = Decoder(torch.tensor(codes, device=dev), graph, a.dim, a.layers, a.heads, a.ffn, a.drop, a.max_len, a.temp).to(dev)
+    model = Decoder(torch.tensor(codes, device=dev), graph, a.dim, a.layers, a.heads, a.ffn, a.drop, a.max_len, a.temp, graph_input=not a.rerank_graph).to(dev)
     if a.init:
         state = torch.load(a.init, map_location=dev)
         if graph is not None:
