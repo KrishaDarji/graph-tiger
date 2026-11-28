@@ -2,8 +2,6 @@
 
 Test results from the verified pipeline (preprocessing checked to be identical to RPG's official code). All items are ranked, ties count against the model. Protocol and significance rules: [PROTOCOL.md](PROTOCOL.md). Every run behind these tables is a row of [runs.csv](runs.csv).
 
-**Still running** (tables show what has finished): CDs second seed (currently Plain 1, No graph 0, Graph-TIGER 1 seeds), extra seeds of the placement study, LightGCN recipe runs, and two official-RPG seeds on Sports.
-
 ## 1. Main comparison (leave-one-out, R@5 / N@5 / R@10 / N@10)
 
 | Model (seeds in brackets) | Beauty | Sports | Toys | CDs |
@@ -15,10 +13,10 @@ Test results from the verified pipeline (preprocessing checked to be identical t
 | DiffGRM (published) | .0603 / .0414 / .0876 / .0502 | .0363 / .0245 / .0550 / .0305 | .0618 / .0455 / .0834 / .0524 | .0348 / .0228 / .0550 / .0293 |
 | ACERec (published) | .0610 / .0433 / .0856 / .0513 | .0341 / .0238 / .0494 / .0287 | .0698 / .0514 / .0940 / .0591 | .0547 / .0370 / .0800 / .0451 |
 | TopoGR (published) | .0620 / .0439 / .0883 / .0522 | .0374 / .0258 / .0554 / .0314 | .0712 / .0497 / .0995 / .0588 | .0531 / .0364 / .0783 / .0445 |
-| RPG official code, Sentence-T5, our run | .0493 / .0346 / .0718 / .0418 (3) | .0286 / .0196 / .0428 / .0242 (1) | .0546 / .0379 / .0793 / .0459 (3) | - |
-| Plain (our base, no graph) | .0487 / .0343 / .0699 / .0411 (3) | .0278 / .0193 / .0415 / .0237 (3) | .0542 / .0381 / .0790 / .0461 (3) | .0481 / .0329 / .0708 / .0402 (1) |
-| No graph (item loss + EMA) | .0542 / .0376 / .0790 / .0456 (3) | .0331 / .0225 / .0498 / .0278 (3) | .0592 / .0405 / .0878 / .0498 (3) | pending |
-| **Graph-TIGER** | .0616 / .0422 / .0925 / .0522 (3) | .0356 / .0235 / .0527 / .0290 (3) | .0629 / .0410 / .0952 / .0514 (3) | .0692 / .0455 / .1042 / .0568 (1) |
+| RPG official code, Sentence-T5, our run | .0493 / .0346 / .0718 / .0418 (3) | .0283 / .0196 / .0423 / .0241 (3) | .0546 / .0379 / .0793 / .0459 (3) | - |
+| Plain (our base, no graph) | .0487 / .0343 / .0699 / .0411 (3) | .0278 / .0193 / .0415 / .0237 (3) | .0542 / .0381 / .0790 / .0461 (3) | .0488 / .0332 / .0712 / .0405 (3) |
+| No graph (item loss + EMA) | .0542 / .0376 / .0790 / .0456 (3) | .0331 / .0225 / .0498 / .0278 (3) | .0592 / .0405 / .0878 / .0498 (3) | .0586 / .0385 / .0893 / .0484 (3) |
+| **Graph-TIGER** | .0616 / .0422 / .0925 / .0522 (3) | .0356 / .0235 / .0527 / .0290 (3) | .0629 / .0410 / .0952 / .0514 (3) | .0691 / .0455 / .1035 / .0566 (3) |
 | Graph-TIGER + EASE (ensemble) | .0624 / .0429 / .0929 / .0527 | .0378 / .0254 / .0565 / .0315 | .0630 / .0415 / .0962 / .0522 | - |
 
 ## 2. Significance (paired bootstrap over users, seed-averaged; n.s. = 95% interval includes 0)
@@ -34,7 +32,9 @@ Test results from the verified pipeline (preprocessing checked to be identical t
 | Toys | Graph-TIGER vs Plain | 3 | +16.1% | +7.5% | +20.6% | +11.6% |
 | Toys | Graph-TIGER vs No graph | 3 | +6.2% | +1.1% (n.s.) | +8.4% | +3.4% |
 | Toys | No graph vs Plain | 3 | +9.3% | +6.3% | +11.3% | +7.9% |
-| CDs | Graph-TIGER vs Plain | 1 | +43.9% | +38.3% | +47.1% | +41.1% |
+| CDs | Graph-TIGER vs Plain | 3 | +41.5% | +36.9% | +45.3% | +39.9% |
+| CDs | Graph-TIGER vs No graph | 3 | +17.9% | +18.2% | +15.9% | +17.0% |
+| CDs | No graph vs Plain | 3 | +20.1% | +15.9% | +25.3% | +19.5% |
 
 **Against the best published value per metric** (bootstrap interval of our seed-averaged metric; published values treated as exact):
 
@@ -43,7 +43,7 @@ Test results from the verified pipeline (preprocessing checked to be identical t
 | Beauty | -0.7% n.s. (TopoGR) | -3.9% n.s. (TopoGR) | +4.8% above (TopoGR) | -0.1% n.s. (TopoGR) |
 | Sports | -4.7% below (TopoGR) | -8.9% below (TopoGR) | -4.9% below (TopoGR) | -7.6% below (TopoGR) |
 | Toys | -11.7% below (TopoGR) | -20.2% below (ACERec) | -4.3% below (TopoGR) | -12.9% below (ACERec) |
-| CDs | +26.6% above (ACERec) | +23.0% above (ACERec) | +30.2% above (ACERec) | +25.9% above (ACERec) |
+| CDs | +26.3% above (ACERec) | +23.0% above (ACERec) | +29.4% above (ACERec) | +25.5% above (ACERec) |
 
 ## 3. Ablation: every combination of the three components (Beauty, R@10 / N@10)
 
@@ -60,20 +60,20 @@ Test results from the verified pipeline (preprocessing checked to be identical t
 |---|---|---|
 | gate only, 64-d | 0.0834 / 0.0473 [0.0605] (3) | 0.0819 / 0.0482 [0.0619] (3) |
 | gate only, 128-d | 0.0878 / 0.0493 [0.0623] (3) | 0.0835 / 0.0491 [0.0629] (3) |
-| 128-d + EMA | 0.0905 / 0.0510 [0.0634] (3) | 0.0849 / 0.0504 [0.0641] (2) |
-| 128-d + item loss 0.1 + EMA | 0.0927 / 0.0512 [0.0629] (1) | 0.0848 / 0.0479 [0.0597] (1) |
+| 128-d + EMA | 0.0905 / 0.0510 [0.0634] (3) | 0.0845 / 0.0500 [0.0641] (3) |
+| 128-d + item loss 0.1 + EMA | 0.0922 / 0.0512 [0.0633] (3) | 0.0846 / 0.0481 [0.0592] (3) |
 | 128-d + item loss 0.3 + EMA | 0.0925 / 0.0522 [0.0642] (3) | 0.0814 / 0.0447 [0.0565] (3) |
 
-With the gate alone the two graphs are close (64-d tie; at 128-d the transition graph leads on R@10 only, and validation N@10 slightly favours LightGCN). The fair comparison lets each graph choose its own training recipe on validation N@10 (rows 3 to 5; preliminary until all seeds finish). Current picks: Transition graph: item loss 0.3 + EMA, test 0.0925 / 0.0522 (3 seeds); LightGCN: EMA only, test 0.0849 / 0.0504 (2 seeds).
+With the gate alone the two graphs are close (64-d tie; at 128-d the transition graph leads on R@10 only, and validation N@10 slightly favours LightGCN). The fair comparison lets each graph choose its own training recipe on validation N@10 (rows 3 to 5). Picks: Transition graph: item loss 0.3 + EMA, test 0.0925 / 0.0522 (3 seeds); LightGCN: EMA only, test 0.0845 / 0.0500 (3 seeds).
 
 ## 5. Where the graph enters (Beauty, no item loss or EMA, test R@10 / N@10, validation N@10 in brackets)
 
 | Placement | Transition graph | LightGCN (64-d in A and B) |
 |---|---|---|
 | no graph | 0.0699 / 0.0411 [0.0561] (3) |  |
-| A: re-rank the scores | 0.0808 / 0.0465 [0.0612] (1) | 0.0777 / 0.0442 [0.0592] (1) |
-| B: inside the semantic IDs, weight 0.5 | 0.0789 / 0.0459 [0.0598] (1) | 0.0752 / 0.0433 [0.0595] (1) |
-| B: inside the semantic IDs, weight 1.0 | 0.0835 / 0.0487 [0.0614] (1) | 0.0774 / 0.0442 [0.0598] (1) |
+| A: re-rank the scores | 0.0811 / 0.0467 [0.0611] (3) | 0.0770 / 0.0442 [0.0587] (3) |
+| B: inside the semantic IDs, weight 0.5 | 0.0803 / 0.0466 [0.0603] (3) | 0.0767 / 0.0444 [0.0597] (3) |
+| B: inside the semantic IDs, weight 1.0 | 0.0832 / 0.0478 [0.0607] (3) | 0.0774 / 0.0442 [0.0600] (3) |
 | C: gated input (128-d / 64-d) | 0.0878 / 0.0493 [0.0623] (3) | 0.0819 / 0.0482 [0.0619] (3) |
 
 The gated input (C) is the best placement for both graphs. The weight in B is chosen on validation.
@@ -132,7 +132,7 @@ Re-scoring only the top 50 items of the item head (`--cands 50`) keeps 100.1 to 
 | Dataset | Seeds | Official RPG, exhaustive (R@10 / N@10) | Our Plain | Exhaustive over graph decoding, R@10 |
 |---|---|---|---|---|
 | Beauty | 3 | 0.0718 / 0.0418 | 0.0699 / 0.0411 | +1.1 to +1.6% |
-| Sports | 1 | 0.0428 / 0.0242 | 0.0415 / 0.0237 | +2.7% |
+| Sports | 3 | 0.0423 / 0.0241 | 0.0415 / 0.0237 | +1.9 to +2.7% |
 | Toys | 3 | 0.0793 / 0.0459 | 0.0790 / 0.0461 | +1.1 to +1.6% |
 
 ## Limits

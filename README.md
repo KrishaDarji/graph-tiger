@@ -16,16 +16,16 @@ The same code also runs the other placements of the graph that we compare: re-ra
 
 ## Results
 
-Amazon Reviews 2014, 5-core, leave-one-out, all items ranked. Test Recall@10 / NDCG@10. Beauty, Sports and Toys are means over 3 seeds; CDs is 1 seed so far.
+Amazon Reviews 2014, 5-core, leave-one-out, all items ranked. Test Recall@10 / NDCG@10; our rows are means over 3 seeds.
 
 | | Beauty | Sports | Toys | CDs |
 |---|---|---|---|---|
 | RPG (published) | .0809 / .0464 | .0463 / .0263 | .0869 / .0490 | .0735 / .0415 |
 | ACERec (published) | .0856 / .0513 | .0494 / .0287 | .0940 / **.0591** | .0800 / .0451 |
 | TopoGR (published) | .0883 / **.0522** | **.0554 / .0314** | **.0995** / .0588 | .0783 / .0445 |
-| Plain (our base, no graph) | .0699 / .0411 | .0415 / .0237 | .0790 / .0461 | .0708 / .0402 |
-| No graph (item loss + averaging) | .0790 / .0456 | .0498 / .0278 | .0878 / .0498 | pending |
-| **Graph-TIGER** | **.0925 / .0522** | .0527 / .0290 | .0952 / .0514 | **.1042 / .0568** |
+| Plain (our base, no graph) | .0699 / .0411 | .0415 / .0237 | .0790 / .0461 | .0712 / .0405 |
+| No graph (item loss + averaging) | .0790 / .0456 | .0498 / .0278 | .0878 / .0498 | .0893 / .0484 |
+| **Graph-TIGER** | **.0925 / .0522** | .0527 / .0290 | .0952 / .0514 | **.1035 / .0566** |
 
 Against the best published values we are ahead on Beauty Recall@10 and on CDs, level on the other Beauty metrics, and behind on Sports and Toys. All tables, significance tests and limits: [docs/RESULTS.md](docs/RESULTS.md). Protocol: [docs/PROTOCOL.md](docs/PROTOCOL.md). One row per run: [docs/runs.csv](docs/runs.csv).
 
